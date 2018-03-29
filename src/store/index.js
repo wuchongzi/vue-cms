@@ -70,7 +70,7 @@ const store = new Vuex.Store({
         login(context, params) {
             params = Object.assign({}, params);
             return new Promise((resolve, reject) => {
-                Request.post("api/boss/login", params)
+                Request.post("boss/login", params)
                     .then(res => {
                         Auth.setToken(res.token || "");
                         resolve(res);

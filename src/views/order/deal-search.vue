@@ -303,7 +303,7 @@ export default {
             this.tableLoading = true;
             return new Promise((resolve, reject) => {
                 this.$http
-                    .post("api/payment/queryPaymentDetail", params)
+                    .post("payment/queryPaymentDetail", params)
                     .then(res => {
                         // 总条数
                         this.total = res.data.total;

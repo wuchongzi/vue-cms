@@ -264,7 +264,7 @@ export default {
             this.tableLoading = true;
             return new Promise((resolve, reject) => {
                 this.$http
-                    .post("api/order/queryOrder", params)
+                    .post("order/queryOrder", params)
                     .then(res => {
                         // 总条数
                         this.total = res.data.total;
