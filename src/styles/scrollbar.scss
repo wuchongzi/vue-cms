@@ -1,0 +1,11 @@
+// smooth scrollbar
+.scrollbar-track {
+    background: transparent!important;
+    transition: opacity 0.3s 0.3s ease-out!important;
+}
+.scrollbar-thumb {
+    background: rgba(151, 154, 158, 0.6)!important;
+}
+.ch-scrollbar:hover .scrollbar-track {
+    opacity: 1;
+}
