@@ -150,7 +150,7 @@ export default {
                     this.moveToView(tag);
                 }
             });
-        }, 1);
+        }, 0);
     },
     watch: {
         '$route' (to, from) {
