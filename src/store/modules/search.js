@@ -4,7 +4,7 @@
  */
 const search = {
     state: {
-
+        searchPars: new Map()
     },
     getters: {
 

@@ -353,12 +353,15 @@ export default {
     },
     created() {
         // 页面初始化查询
+        console.log('created');
+        this.pars.filter.orderId = this.$route.query.orderId
+            ? this.$route.query.orderId
+            : "";
         this.searchData();
     },
     beforeRouteUpdate(to, from, next) {
         console.log("RouteUpdate");
         next();
-        this.searchData();
     }
 };
 </script>
