@@ -68,7 +68,7 @@ export default {
     },
     computed: {
         pageTagsList() {
-            return this.$store.state.pageOpenedList;
+            return this.$store.state.tag.pageTags;
         },
         menuOpenNames() {
             // 打开当前页面所在的菜单列表（设置只展开一个，多个没必要）
@@ -83,7 +83,7 @@ export default {
         },
         cachePage() {
             // 根据当前打开的标签页，定义缓存页面列表
-            let cachePageList = this.$store.state.pageOpenedList.filter(
+            let cachePageList = this.$store.state.tag.pageTags.filter(
                 item => item.meta.keepAlive
             );
             return cachePageList.map(item => item.name);
@@ -114,18 +114,16 @@ export default {
         }
     },
     created() {
-        this.$store.commit("pageOpendInit");
+        this.$store.commit("initPageTags");
     },
     mounted() {
         // 如果在地址栏输入跳转（或者是刷新页面），不会触发当前的路由刷新，所以还需要进行一次pagetag列表的计算
-        this.$store.commit("setPageOpenedList", this.$route);
-        this.$store.commit("setPageOpendLocal");
+        this.$store.dispatch("setPageTags", this.$route);
     },
     watch: {
         $route(to) {
             // 监听路由变化，更新pagetag列表
-            this.$store.commit("setPageOpenedList", to);
-            this.$store.commit("setPageOpendLocal");
+            this.$store.dispatch("setPageTags", to);
         }
     }
 };

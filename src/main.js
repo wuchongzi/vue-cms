@@ -28,11 +28,5 @@ new Vue({
     el: "#app",
     router,
     store: store,
-    render: h => h(App),
-    created() {
-
-    },
-    mounted() {
-        this.$store.commit('pageOpendInit');
-    }
+    render: h => h(App)
 });

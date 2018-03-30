@@ -28,8 +28,7 @@ export default {
     data() {
         return {
             currentPageName: this.$route.name,
-            tagBodyLeft: 0,
-            pageOpenedList: this.$store.state.pageOpenedList
+            tagBodyLeft: 0
         };
     },
     props: {
@@ -45,17 +44,18 @@ export default {
         },
         // 关闭标签页功能
         closePage(event, name) {
-            let pageOpenedList = this.$store.state.pageOpenedList;
-            let index = pageOpenedList.findIndex(item => item.name === name);
+            // 如果关闭的是最后一个标签，则关闭后打开关闭标签的前面那个标签；
+            // 如果不是最后一个标签，则打开关闭标签的后面的一个标签
+            let pageTags = this.$store.state.tag.pageTags;
+            let index = pageTags.findIndex(item => item.name === name);
             let linkToRoute;
             if (this.currentPageName === name) {
-                linkToRoute = pageOpenedList[index + 1] ?  pageOpenedList[index + 1] : pageOpenedList[index - 1];
+                linkToRoute = pageTags[index + 1] ? pageTags[index + 1] : pageTags[index - 1];
             } else {
                 let tagWidth = event.target.parentNode.offsetWidth;
                 this.tagBodyLeft = Math.min(this.tagBodyLeft + tagWidth, 0);
             }
-            this.$store.commit("removeTag", name);
-            this.$store.commit("setPageOpendLocal");
+            this.$store.dispatch("removePageTag", name);
             if (this.currentPageName === name) {
                 this.tagLink(linkToRoute);
             }
@@ -63,14 +63,12 @@ export default {
         // 标签选项功能(关闭所有、关闭其他)
         handleTagsOption(type) {
             if (type === "clearAll") {
-                this.$store.commit("clearAllTags");
-                this.$store.commit("setPageOpendLocal");
+                this.$store.dispatch("clearAllTags");
                 this.$router.push({
                     name: "home"
                 });
             } else {
-                this.$store.commit("clearOtherTags", this);
-                this.$store.commit("setPageOpendLocal");
+                this.$store.dispatch("clearOtherTags", this.$route.name);
             }
             this.tagBodyLeft = 0;
         },
