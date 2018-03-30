@@ -2,11 +2,11 @@
     <div class="page">
         <!-- search -->
         <Card :bordered="false" class="card-search" shadow>
-            <Form ref="searchForm" :model="formSearch" :label-width="120" size="large">
+            <Form ref="searchForm" :model="pars.filter" :label-width="120" size="large">
                 <Row :gutter="10">
                     <Col span="12">
                     <FormItem label="时间：" prop="timeType">
-                        <RadioGroup v-model="formSearch.timeType">
+                        <RadioGroup v-model="pars.filter.timeType">
                             <Radio label="0">交易创建时间</Radio>
                             <Radio label="1">交易完成时间</Radio>
                         </RadioGroup>
@@ -14,45 +14,45 @@
                     </Col>
                     <Col span="12">
                     <FormItem label="时间范围：" prop="timeRange">
-                        <DatePicker type="datetimerange" placeholder="请选择" v-model="formSearch.timeRange" split-panels :editable="false" class="datetimerange-s"></DatePicker>
+                        <DatePicker type="datetimerange" placeholder="请选择" v-model="pars.filter.timeRange" split-panels :editable="false" placement="bottom-end" transfer @on-change="timeRangeChange" class="datetimerange-s"></DatePicker>
                     </FormItem>
                     </Col>
                 </Row>
                 <Row :gutter="10">
                     <Col span="8">
                     <FormItem label="商户号：" prop="accountId">
-                        <Input v-model="formSearch.accountId" class="search-item" placeholder="请输入"></Input>
+                        <Input v-model="pars.filter.accountId" class="search-item" placeholder="请输入"></Input>
                     </FormItem>
                     </Col>
                     <Col span="8">
                     <FormItem label="商户订单号：" prop="orderId">
-                        <Input v-model="formSearch.orderId" class="search-item" placeholder="请输入"></Input>
+                        <Input v-model="pars.filter.orderId" class="search-item" placeholder="请输入"></Input>
                     </FormItem>
                     </Col>
                     <Col span="8">
                     <FormItem label="对账流水号：" prop="tradeId">
-                        <Input v-model="formSearch.tradeId" class="search-item" placeholder="请输入"></Input>
+                        <Input v-model="pars.filter.tradeId" class="search-item" placeholder="请输入"></Input>
                     </FormItem>
                     </Col>
                 </Row>
                 <Row :gutter="10">
                     <Col span="8">
                     <FormItem label="收单机构：" prop="acquiringName">
-                        <Select v-model="formSearch.acquiringName" class="search-item" placeholder="请选择">
+                        <Select v-model="pars.filter.acquiringName" class="search-item" placeholder="请选择">
                             <Option value="1">杭州中信</Option>
                         </Select>
                     </FormItem>
                     </Col>
                     <Col span="8">
                     <FormItem label="产品：" prop="product">
-                        <Select v-model="formSearch.product" class="search-item" placeholder="请选择">
+                        <Select v-model="pars.filter.product" class="search-item" placeholder="请选择">
                             <Option value="1">网银支付B2C</Option>
                         </Select>
                     </FormItem>
                     </Col>
                     <Col span="8">
                     <FormItem label="支付方式：" prop="payType">
-                        <Select v-model="formSearch.payType" class="search-item" placeholder="请选择">
+                        <Select v-model="pars.filter.payType" class="search-item" placeholder="请选择">
                             <Option value="1">支付宝</Option>
                             <Option value="2">微信</Option>
                             <Option value="3">好友邦</Option>
@@ -65,17 +65,17 @@
                     <Col span="8">
                     <FormItem label="订单金额：" prop="accountId">
                         <div class="amount-range">
-                            <InputNumber class="search-number" v-model="formSearch.amountMin" :step="10">
+                            <InputNumber class="search-number" v-model="pars.filter.amountMin" :step="10">
                             </InputNumber>
                             <span class="line">-</span>
-                            <InputNumber class="search-number" v-model="formSearch.amountMax" :step="10">
+                            <InputNumber class="search-number" v-model="pars.filter.amountMax" :step="10">
                             </InputNumber>
                         </div>
                     </FormItem>
                     </Col>
                     <Col span="8">
                     <FormItem label="支付状态：" prop="status">
-                        <Select v-model="formSearch.status" class="search-item" placeholder="请选择">
+                        <Select v-model="pars.filter.status" class="search-item" placeholder="请选择">
                             <Option value="1">支付完成</Option>
                             <Option value="2">已取消</Option>
                             <Option value="3">待支付</Option>
@@ -91,7 +91,6 @@
                 </Row>
             </Form>
         </Card>
-
         <!-- table -->
         <Card :bordered="false" class="card-table" shadow>
             <div slot="title">
@@ -100,7 +99,7 @@
             </div>
             <Table :columns="tableColumns" :data="tableData" :loading="tableLoading"></Table>
             <div class="table-page">
-                <Page :total="total" :current.sync="pageNum" :page-size="pageSize" :page-size-opts="pageSizeOpts" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="pageSizeChange"></Page>
+                <Page :total="total" :current.sync="pars.pageNum" :page-size="pars.pageSize" :page-size-opts="pageSizeOpts" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="pageSizeChange"></Page>
             </div>
         </Card>
     </div>
@@ -109,25 +108,32 @@
 <script>
 import { formatDate, formatThousand } from "@/utils/util";
 import expandRow from "./components/deal-expand.vue";
+import API from "@/api";
 export default {
     name: "dealSearch",
     components: { expandRow },
     data() {
         return {
-            formSearch: {
-                timeType: "0",
-                timeRange: "",
-                accountId: "",
-                orderId: "",
-                tradeId: "",
-                acquiringName: "",
-                product: "",
-                payType: "",
-                amountMin: 0,
-                amountMax: 0,
-                status: ""
+            pars: {
+                filter: {
+                    timeType: "0", // 时间类型
+                    timeRange: "", // 时间范围
+                    accountId: "", // 商户号
+                    orderId: "", // 商户订单号
+                    tradeId: "", // 对账流水号
+                    acquiringName: "", // 收单机构
+                    product: "", // 产品
+                    payType: "", // 支付方式
+                    amountMin: 0, // 最小订单金额
+                    amountMax: 0, // 最大订单金额
+                    status: "" // 支付状态
+                },
+                pageNum: 1, // 页码
+                pageSize: 10 // 每页条数
             },
             tableLoading: false,
+            pageSizeOpts: [10, 20, 30, 50],
+            total: 0,
             tableColumns: [
                 {
                     type: "expand",
@@ -277,33 +283,26 @@ export default {
                     }
                 }
             ],
-            tableData: [],
-            pageSizeOpts: [10, 20, 30, 50],
-            pageNum: 1,
-            pageSize: 10,
-            total: 0
+            tableData: []
         };
     },
     methods: {
-        // 查询数据请求
-        searchRequest(payload) {
-            let searchData = {
-                pageNum: this.pageNum,
-                pageSize: this.pageSize,
-                status: this.formSearch.status,
-                tradeId: this.formSearch.tradeId,
-                orderId: this.formSearch.orderId,
-                accountId: this.formSearch.accountId,
-                payType: this.formSearch.payType
-            };
-            let params = payload
-                ? Object.assign(searchData, payload)
-                : searchData;
-            // console.log("查询参数：",params);
+        // 时间范围变更，格式化返回值
+        timeRangeChange(val) {
+            console.log(val)
+            // this.pars.filter.timeRange = val;
+        },
+        // 查询数据
+        searchData() {
+            let params = {
+                pageNum: this.pars.pageNum,
+                pageSize: this.pars.pageSize,
+                ...this.pars.filter
+            }
             this.tableLoading = true;
             return new Promise((resolve, reject) => {
                 this.$http
-                    .post("payment/queryPaymentDetail", params)
+                    .post(API.dealSearch, params)
                     .then(res => {
                         // 总条数
                         this.total = res.data.total;
@@ -334,47 +333,32 @@ export default {
         },
         // 查询按钮查询
         handleSearch() {
-            this.pageNum = 1;
-            this.pageSize = 10;
-            this.formSearch.orderId
-                ? this.$router.push({
-                      name: "dealSearch",
-                      query: { orderId: this.formSearch.orderId }
-                  })
-                : this.$router.push({
-                      name: "dealSearch"
-                  });
-            this.searchRequest();
+            this.pars.pageNum = 1;
+            this.pars.pageSize = 10;
+            this.searchData();
         },
-        // 页码查询
-        pageChange(val) {
-            this.searchRequest();
+        // 页码变更查询
+        pageChange() {
+            this.searchData();
         },
-        // 每页显示条数变更
+        // 每页条数变更查询
         pageSizeChange(val) {
-            this.pageSize = val;
-            this.pageNum == 1 ? this.searchRequest() : "";
+            this.pars.pageSize = val;
+            this.pars.pageNum === 1 ? this.searchData() : "";
         },
-        // 查新表单重置
+        // 查询表单重置
         handleReset() {
             this.$refs.searchForm.resetFields();
-        },
-        init() {
-            // 路由初始化查询
-            this.formSearch.orderId = this.$route.query.orderId
-                ? this.$route.query.orderId
-                : "";
-            this.searchRequest();
         }
     },
-    mounted() {
-        console.log("mounted");
-        this.init();
+    created() {
+        // 页面初始化查询
+        this.searchData();
     },
     beforeRouteUpdate(to, from, next) {
         console.log("RouteUpdate");
         next();
-        this.init();
+        this.searchData();
     }
 };
 </script>
