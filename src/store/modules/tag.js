@@ -1,11 +1,9 @@
 // 打开页面标签状态管理
-import { baseRoute, tagRoutes } from "@/router/routes";
 import { pick as LPick } from "lodash";
 
 const tag = {
     state: {
-        tagRoutes: [...tagRoutes], // 可以显示标签的路由列表
-        pageTags: [baseRoute.children[0]] // 当前打开的路由列表
+        pageTags: [] // 可控制的pagetags列表
     },
     getters: {},
     mutations: {
@@ -19,11 +17,13 @@ const tag = {
                 "params",
                 "query"
             ]);
-            if (!state.tagRoutes.find(item => item.name === toRoute.name)) {
+
+            // 不需要标签控制的页面拦截（例如首页默认一直在标签中显示，就不加标签控制）
+            if (toRoute.meta.standTag === false) {
                 return false;
             }
             let arr = [...state.pageTags];
-            let i = arr.findIndex(item => item.name === toRoute.name);
+            let i = state.pageTags.findIndex(item => item.name === toRoute.name);
             // 有则替换，无则添加
             i > -1 ? (arr[i] = toRoute) : arr.push(toRoute);
             state.pageTags = arr;
@@ -39,7 +39,7 @@ const tag = {
         initPageTags(state) {
             state.pageTags = localStorage.getItem("pageTags")
                 ? JSON.parse(localStorage.getItem("pageTags"))
-                : [baseRoute.children[0]];
+                : [];
         },
         // 删除单个标签page（关闭标签页）
         removePageTag(state, routeName) {
@@ -49,19 +49,11 @@ const tag = {
         },
         // 清除所有page标签
         clearAllTags(state) {
-            state.pageTags.splice(1);
+            state.pageTags.splice(0);
         },
         // 清除其他page标签
         clearOtherTags(state, thisRouteName) {
-            let i = state.pageTags.findIndex(
-                item => item.name === thisRouteName
-            );
-            if (i === 0) {
-                state.pageTags.splice(1);
-            } else {
-                state.pageTags.splice(i + 1);
-                state.pageTags.splice(1, i - 1);
-            }
+            state.pageTags = state.pageTags.filter(item => item.name === thisRouteName);
         }
     },
     actions: {
@@ -78,7 +70,7 @@ const tag = {
             commit('cachePageTags');
         },
         clearOtherTags({commit, state}, thisRouteName) {
-            commit('clearOtherTags');
+            commit('clearOtherTags', thisRouteName);
             commit('cachePageTags');
         }
     }

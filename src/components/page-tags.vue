@@ -14,8 +14,10 @@
         </div>
         <div ref="scrollBody" class="tags-inner-scroll-body" :style="{left: tagBodyLeft + 'px'}">
             <transition-group name="taglist-moving-animation">
-                <Tag type="dot" v-for="(item, index) in pageTagsList" ref="pageTag" :key="item.name" :name="item.name" @on-close="closePage" @click.native="tagLink(item)" :closable="item.name === 'home'? false : true" :color="item.children?(item.children[0].name===currentPageName?'blue':'default'):(item.name===currentPageName?'blue':'default')">{{ item.meta.title }}
-                </Tag>
+                <!-- 默认首页，不可控制 -->
+                <Tag type="dot" ref="pageTag" key="home" name="home" @click.native="homeTagLink" :closable="false" :color="currentPageName === 'home'?'blue':'default'">首页</Tag>
+                <!-- 可控制的tags -->
+                <Tag type="dot" v-for="(item, index) in pageTagsList" ref="pageTag" :key="item.name" :name="item.name" @on-close="closePage" @click.native="tagLink(item)" :closable="item.name === 'home'? false : true" :color="item.children?(item.children[0].name===currentPageName?'blue':'default'):(item.name===currentPageName?'blue':'default')">{{ item.meta.title }}</Tag>
             </transition-group>
         </div>
     </div>
@@ -34,10 +36,11 @@ export default {
     props: {
         pageTagsList: Array
     },
-    computed: {
-
-    },
+    computed: {},
     methods: {
+        homeTagLink() {
+            this.$router.push({ name: "home" });
+        },
         // 点击tag切换页面
         tagLink(item) {
             this.$router.push(item);
@@ -50,25 +53,42 @@ export default {
             let index = pageTags.findIndex(item => item.name === name);
             let linkToRoute;
             if (this.currentPageName === name) {
-                linkToRoute = pageTags[index + 1] ? pageTags[index + 1] : pageTags[index - 1];
+                linkToRoute = pageTags[index + 1]
+                    ? pageTags[index + 1]
+                    : index === 0 ? { name: "home" } : pageTags[index - 1];
             } else {
                 let tagWidth = event.target.parentNode.offsetWidth;
                 this.tagBodyLeft = Math.min(this.tagBodyLeft + tagWidth, 0);
             }
             this.$store.dispatch("removePageTag", name);
-            if (this.currentPageName === name) {
-                this.tagLink(linkToRoute);
-            }
+            // 清除查询参数
+            this.$store.state.search.cachePars.has(name)
+                ? this.$store.dispatch("removeCachePars", name)
+                : "";
+            // 如果关闭的是当前打开的标签，关闭后需要跳转
+            this.currentPageName === name ? this.tagLink(linkToRoute) : "";
         },
         // 标签选项功能(关闭所有、关闭其他)
         handleTagsOption(type) {
             if (type === "clearAll") {
                 this.$store.dispatch("clearAllTags");
+                this.$store.dispatch("clearCachePars");
                 this.$router.push({
                     name: "home"
                 });
             } else {
                 this.$store.dispatch("clearOtherTags", this.$route.name);
+                // 清除查询参数
+                let cacheParsKeys = [...this.$store.state.search.cachePars.keys()];
+                if (cacheParsKeys.find(item => item === this.$route.name)) {
+                    cacheParsKeys.map(item => {
+                        item === this.$route.name ?
+                            "" :
+                            this.$store.dispatch("removeCachePars", item);
+                    })
+                } else {
+                    this.$store.dispatch("clearCachePars");
+                }
             }
             this.tagBodyLeft = 0;
         },
@@ -153,7 +173,7 @@ export default {
         }, 0);
     },
     watch: {
-        '$route' (to, from) {
+        $route(to, from) {
             this.currentPageName = to.name;
             this.$nextTick(() => {
                 this.$refs.pageTag.forEach((item, index) => {

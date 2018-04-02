@@ -99,15 +99,16 @@
             </div>
             <Table :columns="tableColumns" :data="tableData" :loading="tableLoading"></Table>
             <div class="table-page">
-                <Page :total="total" :current.sync="pars.pageNum" :page-size="pars.pageSize" :page-size-opts="pageSizeOpts" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="pageSizeChange"></Page>
+                <Page :total="tableDataTotal" :current.sync="pars.pageNum" :page-size="pars.pageSize" :page-size-opts="pageSizeOpts" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="pageSizeChange"></Page>
             </div>
         </Card>
     </div>
 </template>
 
 <script>
-import { formatDate, formatThousand } from "@/utils/util";
 import expandRow from "./components/deal-expand.vue";
+import { formatDate, formatThousand } from "@/utils/util";
+import { searchData } from "@/utils/search";
 import API from "@/api";
 export default {
     name: "dealSearch",
@@ -133,7 +134,7 @@ export default {
             },
             tableLoading: false,
             pageSizeOpts: [10, 20, 30, 50],
-            total: 0,
+            tableDataTotal: 0, // 总条数
             tableColumns: [
                 {
                     type: "expand",
@@ -289,79 +290,45 @@ export default {
     methods: {
         // 时间范围变更，格式化返回值
         timeRangeChange(val) {
-            console.log(val)
+            console.log(val);
             // this.pars.filter.timeRange = val;
         },
-        // 查询数据
-        searchData() {
-            let params = {
-                pageNum: this.pars.pageNum,
-                pageSize: this.pars.pageSize,
-                ...this.pars.filter
-            }
-            this.tableLoading = true;
-            return new Promise((resolve, reject) => {
-                this.$http
-                    .post(API.dealSearch, params)
-                    .then(res => {
-                        // 总条数
-                        this.total = res.data.total;
-                        let dataList = res.data.list;
-                        let startRow = res.data.startRow;
-                        dataList =
-                            dataList.length > 0
-                                ? dataList.map((item, index) => {
-                                      item.rowId = startRow + index;
-                                      return item;
-                                  })
-                                : [];
-                        this.tableData = dataList;
-                        this.tableLoading = false;
-                        resolve(res);
-                    })
-                    .catch(error => {
-                        let message =
-                            typeof error === "string"
-                                ? error
-                                : "查询失败，请稍后重试";
-                        this.tableLoading = false;
-                        reject(error);
-                        this.$Message.destroy();
-                        this.$Message.error(message);
-                    });
-            });
+        // 查询操作
+        doSearch() {
+            searchData(this, API.dealSearch);
         },
         // 查询按钮查询
         handleSearch() {
             this.pars.pageNum = 1;
             this.pars.pageSize = 10;
-            this.searchData();
+            this.doSearch();
         },
         // 页码变更查询
         pageChange() {
-            this.searchData();
+            this.doSearch();
         },
         // 每页条数变更查询
         pageSizeChange(val) {
+            // 如果当前不是第一页，每页条数变更会自动跳到第一页触发页码变更
             this.pars.pageSize = val;
-            this.pars.pageNum === 1 ? this.searchData() : "";
+            this.pars.pageNum === 1 ? this.doSearch() : "";
         },
         // 查询表单重置
         handleReset() {
             this.$refs.searchForm.resetFields();
+        },
+        // 页面初始化
+        pageInit() {
+            if (this.$store.state.search.cachePars.has(this.$route.name)) {
+                this.pars = this.$store.state.search.cachePars.get(
+                    this.$route.name
+                );
+            }
+            this.doSearch();
         }
     },
     created() {
-        // 页面初始化查询
-        console.log('created');
-        this.pars.filter.orderId = this.$route.query.orderId
-            ? this.$route.query.orderId
-            : "";
-        this.searchData();
-    },
-    beforeRouteUpdate(to, from, next) {
-        console.log("RouteUpdate");
-        next();
+        this.pageInit();
     }
 };
 </script>

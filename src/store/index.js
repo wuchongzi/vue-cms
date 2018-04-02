@@ -5,6 +5,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import tag from './modules/tag';
+import search from './modules/search';
 
 import Auth from "@/utils/auth";
 import Request from "@/utils/http";
@@ -55,7 +56,8 @@ const store = new Vuex.Store({
         }
     },
     modules: {
-        tag
+        tag,
+        search
     }
 });
 

@@ -53,7 +53,6 @@
 <script>
 import appMenu from "@/components/app-menu.vue";
 import pageTags from "@/components/page-tags";
-import { tagRoutes } from "@/router/routes";
 export default {
     components: {
         appMenu,
@@ -114,6 +113,7 @@ export default {
         }
     },
     created() {
+        // 初始化pagetags
         this.$store.commit("initPageTags");
     },
     mounted() {
