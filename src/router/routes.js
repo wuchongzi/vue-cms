@@ -14,7 +14,7 @@ export const baseRoute = {
         {
             path: "home",
             name: "home",
-            meta: { title: "首页", icon: "home" },
+            meta: { title: "首页", icon: "home", standTag: false },
             component: () => import("@/views/home/index.vue")
         },
         {
