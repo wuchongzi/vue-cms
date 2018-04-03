@@ -1,8 +1,18 @@
 /**
  * @author wuchong
- * @description 路由对象
+ * @description 路由配置
  */
 import Layout from "@/views/Layout";
+
+/**
+ * @description 路由meta字段说明
+ * @param title 标题
+ * @param icon 菜单栏显示的icon
+ * @param standTag 是否支持在标签栏打开关闭
+ * @param isLoginRouter 是否是与登录相关的路由
+ * @param withoutAuth 是否不需要登录认证就可以访问
+ * @param isSubMenu 是否是一级菜单（只供打开关闭，不做跳转的）
+ */
 
 // 公共路由
 export const baseRoute = {
@@ -64,15 +74,6 @@ export const menuRoutes = [
         ]
     }
 ];
-
-// 可以在标签中打开的页面路由
-const tagRoutes = [
-    ...baseRoute.children
-]
-menuRoutes.map(item => {
-    item.children ? tagRoutes.push(...item.children) : tagRoutes.push(item);
-});
-export {tagRoutes}
 
 export const appRoutes = [
     baseRoute,

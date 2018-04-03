@@ -7,7 +7,7 @@ const tag = {
     },
     getters: {},
     mutations: {
-        // 监听路由变化，更新pageOpenedList列表
+        // 监听路由变化，更新pagetags列表
         setPageTags(state, toRoute) {
             // LPick - 根据指定字段拷贝对象
             toRoute = LPick(toRoute, [
@@ -19,7 +19,7 @@ const tag = {
             ]);
 
             // 不需要标签控制的页面拦截（例如首页默认一直在标签中显示，就不加标签控制）
-            if (toRoute.meta.standTag === false) {
+            if (toRoute.meta.standTag === false || toRoute.meta.isSubMenu) {
                 return false;
             }
             let arr = [...state.pageTags];
