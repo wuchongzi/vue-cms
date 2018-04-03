@@ -1,25 +1,36 @@
 <template>
     <div class="app-menu ch-scrollbar" :style="{background: bgColor}">
         <slot name="top"></slot>
-        <Menu ref="sideMenu" :theme="menuTheme" :active-name="activeName" :open-names="openNames" accordion width="auto" @on-select="handleSelected">
+        <Menu ref="sideMenu" :theme="menuTheme" :active-name="activeName" :open-names="openNames" :accordion="false" width="auto" @on-select="handleSelected">
             <MenuItem name="home">
-                <Icon type="home"></Icon>
-                <span>首页</span>
+                <Icon type="home" :size="iconSize"></Icon>
+                <span class="menu-title">首页</span>
             </MenuItem>
-            <Submenu name="order">
-                <template slot="title">
-                    <Icon type="document-text"></Icon>
-                    <span>订单管理</span>
-                </template>
-                <MenuItem name="orderSearch">订单查询</MenuItem>
-                <MenuItem name="dealSearch">交易查询</MenuItem>
-            </Submenu>
+            <template v-for="item in menuList">
+                <Submenu v-if="item.children" :name="item.name" :key="item.name">
+                    <template slot="title">
+                        <Icon :type="item.meta.icon || 'document-text'" :size="iconSize"></Icon>
+                        <span class="menu-title">{{ item.meta.title }}</span>
+                    </template>
+                    <template v-for="child in item.children">
+                        <MenuItem :name="child.name" :key="child.name">
+                            <Icon v-if="child.meta.icon" :type="child.meta.icon"></Icon>
+                            <span class="menu-title">{{ child.meta.title }}</span>
+                        </MenuItem>
+                    </template>
+                </Submenu>
+                <MenuItem v-else :name="item.name" :key="item.name">
+                    <Icon :type="item.meta.icon || 'document-text'" :size="iconSize"></Icon>
+                    <span class="menu-title">{{ item.meta.title }}</span>
+                </MenuItem>
+            </template>
         </Menu>
     </div>
 </template>
 
 <script>
 import Scrollbar from "smooth-scrollbar";
+import { menuRoutes } from "@/router/routes";
 export default {
     name: "appMenu",
     props: {
@@ -38,12 +49,13 @@ export default {
     },
     data() {
         return {
-
+            menuList: menuRoutes,
+            iconSize: 14
         };
     },
     computed: {
-        bgColor () {
-            return this.menuTheme === 'dark' ? '#495060' : '#fff';
+        bgColor() {
+            return this.menuTheme === "dark" ? "#495060" : "#fff";
         }
     },
     methods: {
@@ -53,8 +65,10 @@ export default {
     },
     mounted() {
         this.$nextTick(function() {
+            // 自定义滚动条
             Scrollbar.init(document.querySelector(".ch-scrollbar"));
         });
+        console.log(this.menuList)
     },
     watch: {
         openNames(val) {
@@ -70,7 +84,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/scrollbar.scss';
+@import "../styles/scrollbar.scss";
 .app-menu {
     height: 100%;
 }

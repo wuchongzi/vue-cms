@@ -25,10 +25,9 @@ router.beforeEach((to, from, next) => {
     if (Auth.getToken()) { // 本地存在登录token（登录过，浏览器未失效，但是服务器失效未知）
         if (to.matched.some(res => res.meta.isLoginRouter)) {
             // 进入登录相关页面做拦截处理
-            // next({
-            //     path: "/"
-            // });
-            next(false)
+            next({
+                path: "/"
+            });
             iView.LoadingBar.finish();
         } else {
 

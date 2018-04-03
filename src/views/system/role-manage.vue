@@ -1,15 +1,11 @@
 <template>
     <div class="page">
-        message
+        角色管理
     </div>
 </template>
 
 <script>
 export default {
-    name: 'message'
-}
+    name: 'roleManage'
+};
 </script>
-
-<style>
-
-</style>

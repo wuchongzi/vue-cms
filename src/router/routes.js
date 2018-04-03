@@ -56,7 +56,7 @@ export const menuRoutes = [
     {
         path: "/order",
         name: "order",
-        meta: { title: "订单管理", icon: "order", isSubMenu: true },
+        meta: { title: "订单管理", icon: "clipboard", isSubMenu: true },
         component: Layout,
         children: [
             {
@@ -70,6 +70,20 @@ export const menuRoutes = [
                 name: "dealSearch",
                 meta: { title: "交易查询" },
                 component: () => import("@/views/order/deal-search.vue")
+            }
+        ]
+    },
+    {
+        path: "/system",
+        name: "system",
+        meta: { title: "系统管理", icon: "gear-b", isSubMenu: true },
+        component: Layout,
+        children: [
+            {
+                path: "role-manage",
+                name: "roleManage",
+                meta: { title: "角色管理" },
+                component: () => import("@/views/system/role-manage.vue")
             }
         ]
     }
