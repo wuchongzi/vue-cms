@@ -118,7 +118,7 @@ export default {
             pars: {
                 filter: {
                     timeType: "0", // 时间类型
-                    timeRange: "", // 时间范围
+                    timeRange: ["", ""], // 时间范围
                     accountId: "", // 商户号
                     orderId: "", // 商户订单号
                     tradeId: "", // 对账流水号
