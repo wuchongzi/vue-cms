@@ -68,7 +68,6 @@ export default {
             // 自定义滚动条
             Scrollbar.init(document.querySelector(".ch-scrollbar"));
         });
-        console.log(this.menuList)
     },
     watch: {
         openNames(val) {
