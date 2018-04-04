@@ -12,7 +12,7 @@
                     </div>
                     <div class="login-form">
                         <Form ref="formLoginRef" :model="formLogin" :rules="rules">
-                            <FormItem prop="user">
+                            <FormItem prop="userName">
                                 <Input type="text" size="large" v-model="formLogin.userName" placeholder="请输入用户名" clearable>
                                     <span slot="prepend">
                                         <Icon :size="16" type="person"></Icon>
