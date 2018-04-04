@@ -4,8 +4,8 @@
  */
 import Vue from "vue";
 import Vuex from "vuex";
-import tag from './modules/tag';
-import search from './modules/search';
+import tag from "./modules/tag";
+import search from "./modules/search";
 
 import Auth from "@/utils/auth";
 import Request from "@/utils/http";
@@ -17,15 +17,14 @@ const store = new Vuex.Store({
     state: {
         userInfo: null
     },
-    getters: {
-
-    },
+    getters: {},
     mutations: {
-        appReset(state) { // 退出重置
+        appReset(state) {
+            // 退出重置
             Auth.removeToken();
             state.userInfo = null;
             localStorage.clear();
-        },
+        }
     },
     actions: {
         // 登录
@@ -49,8 +48,8 @@ const store = new Vuex.Store({
                     context.commit("appReset");
                     resolve();
                 } catch (e) {
-                    console.error(e)
-                    reject(e)
+                    console.error(e);
+                    reject(e);
                 }
             });
         }

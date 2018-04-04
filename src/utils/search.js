@@ -39,15 +39,9 @@ export const searchData = (vm, url) => {
             })
             .catch(error => {
                 // 查询失败页面状态重置
-                vm.tableData = [];
-                vm.tableDataTotal = 0;
-                vm.pars.pageNum = 1;
-                vm.pars.pageSize = 10;
-                vm.$store.dispatch("saveCachePars", {
-                    name: vm.$route.name,
-                    pars: vm.pars
-                });
-
+                // vm.tableData = [];
+                // vm.tableDataTotal = 0;
+                vm.$store.dispatch("removeCachePars", vm.$route.name);
                 let message =
                     typeof error === "string" ? error : "查询失败，请稍后重试";
                 vm.tableLoading = false;
