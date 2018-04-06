@@ -147,7 +147,7 @@ export default {
         },
         // 点击菜单树复选框时触发
         menuTreeChecked(val) {
-            console.log(val)
+            console.log(val);
         }
     }
 };
@@ -155,5 +155,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../styles/page.scss";
-
 </style>
