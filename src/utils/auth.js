@@ -14,10 +14,10 @@ export default {
         return Cookies.get(TokenKey) || "";
     },
     setToken: (token) => {
-        return Cookies.set(TokenKey, token, {
-            expires: outTime
-        });
-        // return Cookies.set(TokenKey, token);
+        // return Cookies.set(TokenKey, token, {
+        //     expires: outTime
+        // });
+        return Cookies.set(TokenKey, token);
     },
     removeToken: () => {
         return Cookies.remove(TokenKey)

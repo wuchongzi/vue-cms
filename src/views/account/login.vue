@@ -79,26 +79,26 @@ export default {
                     let params = Object.assign({}, this.formLogin);
                     // 加密
                     // params.passWord = crypto.MD5(params.passWord);
-                    this.$store
-                        .dispatch("login", params)
-                        .then(res => {
-                            this.btnLoading = false;
-                            this.$router.replace({ path: "/" });
-                        })
-                        .catch(error => {
-                            let message =
-                                typeof error === "string" ? error : "登录失败，请稍后重试";
-                            this.btnLoading = false;
-                            this.$Message.destroy()
-                            this.$Message.error(message);
-                        });
+                    // this.$store
+                    //     .dispatch("login", params)
+                    //     .then(res => {
+                    //         this.btnLoading = false;
+                    //         this.$router.replace({ path: "/" });
+                    //     })
+                    //     .catch(error => {
+                    //         let message =
+                    //             typeof error === "string" ? error : "登录失败，请稍后重试";
+                    //         this.btnLoading = false;
+                    //         this.$Message.destroy()
+                    //         this.$Message.error(message);
+                    //     });
 
                     // 模拟登录
-                    // setTimeout(() => {
-                    //     this.btnLoading = false;
-                    //     Auth.setToken("cals");
-                    //     this.$router.push({ path: "/" });
-                    // }, 2000);
+                    setTimeout(() => {
+                        this.btnLoading = false;
+                        Auth.setToken("cals");
+                        this.$router.push({ path: "/" });
+                    }, 2000);
                 } else {
                     console.log("error submit!!");
                     return false;

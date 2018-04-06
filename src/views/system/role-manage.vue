@@ -10,7 +10,9 @@
             </div>
         </Card>
         <Modal v-model="roleEdit" title="编辑角色" ok-text="保存" @on-ok="roleEditSave" @on-cancel="roleEditCancel" :loading="okLoading" :mask-closable="false">
-            <Tree ref="menuTree" :data="menuTreeData" show-checkbox></Tree>
+            <div class="modal-inner">
+                <Tree ref="menuTree" :data="menuTreeData" @on-check-change="menuTreeChecked" show-checkbox></Tree>
+            </div>
         </Modal>
     </div>
 </template>
@@ -97,37 +99,33 @@ export default {
             okLoading: true,
             menuTreeData: [
                 {
-                    title: "parent 1",
-                    expand: true,
+                    title: "订单管理",
+                    name: "order",
+                    checked: true,
                     children: [
                         {
-                            title: "parent 1-1",
-                            expand: true
+                            title: "订单查询",
+                            name: "orderSearch"
                         },
                         {
                             title: "parent 1-2",
-                            expand: true
+                            name: "dealSearch"
                         }
                     ]
                 },
                 {
-                    title: "parent 2",
-                    expand: true,
+                    title: "系统管理",
+                    name: "system",
                     children: [
                         {
-                            title: "parent 2-1",
-                            expand: true
+                            title: "用户管理",
+                            name: "userManage"
                         },
                         {
-                            title: "parent 2-2",
-                            expand: true
+                            title: "角色管理",
+                            name: "roleManage"
                         }
                     ]
-                },
-                {
-                    title: "parent 3",
-                    expand: true,
-                    checked: true
                 }
             ]
         };
@@ -145,12 +143,17 @@ export default {
         },
         // 编辑取消
         roleEditCancel() {
-            this.$Message.info("Clicked cancel");
+            // this.$Message.info("Clicked cancel");
+        },
+        // 点击菜单树复选框时触发
+        menuTreeChecked(val) {
+            console.log(val)
         }
     }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../../styles/page.scss";
+
 </style>
