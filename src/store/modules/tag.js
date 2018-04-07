@@ -30,15 +30,15 @@ const tag = {
         },
         // 缓存当前打开的pagetags到本地
         cachePageTags(state) {
-            localStorage.setItem(
+            sessionStorage.setItem(
                 "pageTags",
                 JSON.stringify(state.pageTags)
             );
         },
         // 初始化pagetags列表
         initPageTags(state) {
-            state.pageTags = localStorage.getItem("pageTags")
-                ? JSON.parse(localStorage.getItem("pageTags"))
+            state.pageTags = sessionStorage.getItem("pageTags")
+                ? JSON.parse(sessionStorage.getItem("pageTags"))
                 : [];
         },
         // 删除单个标签page（关闭标签页）

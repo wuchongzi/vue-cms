@@ -14,29 +14,8 @@ import Layout from "@/views/Layout";
  * @param isSubMenu 是否是一级菜单（只供打开关闭，不做跳转的）
  */
 
-// 公共路由
-export const baseRoute = {
-    path: "/",
-    component: Layout,
-    name: "app",
-    redirect: "/home",
-    children: [
-        {
-            path: "home",
-            name: "home",
-            meta: { title: "首页", icon: "home", standTag: false },
-            component: () => import("@/views/home/index.vue")
-        },
-        {
-            path: "message",
-            name: "message",
-            meta: { title: "消息中心" },
-            component: () => import("@/views/message/index.vue")
-        }
-    ]
-};
-
-export const otherRoutes = [
+// 基础路由
+export const baseRoute = [
     {
         path: "/login",
         name: "login",
@@ -48,6 +27,26 @@ export const otherRoutes = [
         name: "404",
         meta: { title: "404", withoutAuth: true },
         component: () => import("@/views/error/404.vue")
+    },
+    {
+        path: "/",
+        component: Layout,
+        name: "app",
+        redirect: "/home",
+        children: [
+            {
+                path: "home",
+                name: "home",
+                meta: { title: "首页", icon: "home", standTag: false },
+                component: () => import("@/views/home/index.vue")
+            },
+            {
+                path: "message",
+                name: "message",
+                meta: { title: "消息中心" },
+                component: () => import("@/views/message/index.vue")
+            }
+        ]
     }
 ];
 
@@ -90,8 +89,7 @@ export const menuRoutes = [
 ];
 
 export const appRoutes = [
-    baseRoute,
-    ...otherRoutes,
+    ...baseRoute,
     ...menuRoutes,
     { path: "*", redirect: "/404" }
 ];

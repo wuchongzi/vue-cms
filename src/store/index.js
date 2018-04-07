@@ -23,7 +23,7 @@ const store = new Vuex.Store({
             // 退出重置
             Auth.removeToken();
             state.userInfo = null;
-            localStorage.clear();
+            sessionStorage.clear();
         }
     },
     actions: {
