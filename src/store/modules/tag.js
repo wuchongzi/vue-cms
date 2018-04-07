@@ -22,11 +22,9 @@ const tag = {
             if (toRoute.meta.standTag === false || toRoute.meta.isSubMenu) {
                 return false;
             }
-            let arr = [...state.pageTags];
             let i = state.pageTags.findIndex(item => item.name === toRoute.name);
             // 有则替换，无则添加
-            i > -1 ? (arr[i] = toRoute) : arr.push(toRoute);
-            state.pageTags = arr;
+            i > -1 ? (state.pageTags[i] = toRoute) : state.pageTags.push(toRoute);
         },
         // 缓存当前打开的pagetags到本地
         cachePageTags(state) {
