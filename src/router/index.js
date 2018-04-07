@@ -30,7 +30,6 @@ router.beforeEach((to, from, next) => {
             });
             iView.LoadingBar.finish();
         } else {
-
             next();
         }
     } else { // 本地不存在登录token（未登录过）

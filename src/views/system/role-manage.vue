@@ -108,7 +108,7 @@ export default {
                             name: "orderSearch"
                         },
                         {
-                            title: "parent 1-2",
+                            title: "交易查询",
                             name: "dealSearch"
                         }
                     ]
