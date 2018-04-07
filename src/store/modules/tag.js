@@ -23,8 +23,8 @@ const tag = {
                 return false;
             }
             let i = state.pageTags.findIndex(item => item.name === toRoute.name);
-            // 有则替换，无则添加
-            i > -1 ? (state.pageTags[i] = toRoute) : state.pageTags.push(toRoute);
+            // 有则替换，无则添加，注意替换时使用splice，因为vue官方文档说明：使用索引直接设置时vue无法检测到数组变动
+            i > -1 ? state.pageTags.splice(i, 1, toRoute) : state.pageTags.push(toRoute);
         },
         // 缓存当前打开的pagetags到本地
         cachePageTags(state) {
