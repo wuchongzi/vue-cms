@@ -28,34 +28,27 @@ p {
     margin: 0;
 }
 
-// button
-.ivu-btn-text:focus {
-    box-shadow: none;
-}
-
 // 日期时间选择
 .datetimerange-s {
     width: 300px;
 }
-
-// table
-.ivu-form .ivu-form-item-label {
-    padding-right: 10px;
+// iview默认样式修改
+#app {
+    // 文字按钮阴影去除
+    .ivu-btn-text:focus {
+        box-shadow: none;
+    }
+    // 表单label右边距
+    .ivu-form .ivu-form-item-label {
+        padding-right: 10px;
+    }
+    // 表格th中的padding
+    .ivu-table-cell {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    // 下拉表格内容边距调整
+    td.ivu-table-expanded-cell {
+        padding: 20px 20px 10px 50px;
+    }
 }
-.ivu-table-cell {
-    padding-left: 8px;
-    padding-right: 8px;
-}
-td.ivu-table-expanded-cell {
-    padding: 20px 20px 10px 50px;
-}
-
-// menu title和icon对齐
-// .ivu-menu i.ivu-icon{
-//     vertical-align: middle;
-// }
-// .ivu-menu .menu-title {
-//     display: inline-block;
-//     vertical-align: middle;
-//     line-height: 1;
-// }
