@@ -36,7 +36,7 @@ service.interceptors.request.use(
         return config;
     },
     error => {
-        console.error(error);
+        // console.error(error);
         let message = "网络异常";
         return Promise.reject(message);
     }
@@ -57,7 +57,7 @@ service.interceptors.response.use(
         }
     },
     error => {
-        console.error(error);
+        // console.error(error);
         // 响应无结果，接口调用失败
         let message = "请求失败";
         // 直接抛出异常信息

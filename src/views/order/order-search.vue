@@ -280,6 +280,7 @@ export default {
         },
         // 页面初始化
         pageInit() {
+            // 获取缓存的查询参数
             if (this.$store.state.search.cachePars.has(this.$route.name)) {
                 this.pars = this.$store.state.search.cachePars.get(
                     this.$route.name

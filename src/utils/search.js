@@ -45,7 +45,7 @@ export const searchData = (vm, url) => {
                 let message =
                     typeof error === "string" ? error : "查询失败，请稍后重试";
                 vm.tableLoading = false;
-                reject(error);
+                reject(error); // reject的做法等同于抛出错误，会打印出错误
                 vm.$Message.destroy();
                 vm.$Message.error(message);
             });
