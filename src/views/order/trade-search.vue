@@ -106,12 +106,12 @@
 </template>
 
 <script>
-import expandRow from "./components/deal-expand.vue";
+import expandRow from "./components/trade-expand.vue";
 import { formatDate, formatThousand } from "@/utils/util";
 import { searchData } from "@/utils/search";
 import API from "@/api";
 export default {
-    name: "dealSearch",
+    name: "tradeSearch",
     components: { expandRow },
     data() {
         return {

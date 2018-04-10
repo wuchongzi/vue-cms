@@ -65,10 +65,10 @@ export const menuRoutes = [
                 component: () => import("@/views/order/order-search.vue")
             },
             {
-                path: "deal-search",
-                name: "dealSearch",
+                path: "trade-search",
+                name: "tradeSearch",
                 meta: { title: "交易查询" },
-                component: () => import("@/views/order/deal-search.vue")
+                component: () => import("@/views/order/trade-search.vue")
             }
         ]
     },
