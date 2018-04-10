@@ -295,7 +295,7 @@ export default {
         },
         // 查询操作
         doSearch() {
-            searchData(this, API.dealSearch);
+            searchData(this, API.tradeSearch);
         },
         // 查询按钮查询
         handleSearch() {
