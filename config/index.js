@@ -5,6 +5,7 @@
 const path = require("path");
 
 module.exports = {
+    // 开发环境
     dev: {
         // Paths
         assetsSubDirectory: "static",
@@ -15,8 +16,6 @@ module.exports = {
          */
         proxyTable: {
             "/boss-web": {
-                // target: "http://192.168.20.142:9005", // J
-                // target: "http://192.168.20.136:9005", // Y
                 target: "http://10.100.2.61:8080", // F
                 changeOrigin: true,
                 secure: false, // https必须，false——不验证证书
@@ -51,7 +50,7 @@ module.exports = {
 
         cssSourceMap: true
     },
-
+    // 生产测试环境打包
     build: {
         // Template for index.html
         index: path.resolve(__dirname, "../dist/index.html"),

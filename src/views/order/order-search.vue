@@ -12,11 +12,11 @@
                         </RadioGroup>
                     </FormItem>
                     </Col>
-                    <Col span="12">
+                    <!-- <Col span="12">
                     <FormItem label="时间范围：" prop="timeRange">
                         <DatePicker type="datetimerange" placeholder="请选择" v-model="pars.filter.timeRange" split-panels :editable="false" placement="bottom-end" transfer @on-change="timeRangeChange" class="datetimerange-s"></DatePicker>
                     </FormItem>
-                    </Col>
+                    </Col> -->
                 </Row>
                 <Row :gutter="10">
                     <Col span="8">
@@ -94,7 +94,7 @@ export default {
             pars: {
                 filter: {
                     timeType: "0", // 时间类型
-                    timeRange: ["", ""], // 时间范围
+                    // timeRange: ["", ""], // 时间范围
                     accountId: "", // 商户号
                     orderId: "", // 商户订单号
                     paymentId: "", // 订单交易流水号
@@ -314,6 +314,11 @@ export default {
                 name: "dealSearch"
             });
         }
+    },
+    beforeRouteEnter: (to, from, next) => {
+        next(vm => {
+            console.log(vm.pars);
+        })
     },
     created() {
         this.pageInit();
