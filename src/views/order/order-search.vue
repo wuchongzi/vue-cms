@@ -317,7 +317,7 @@ export default {
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
-            console.log(vm.pars);
+            console.log(vm.pars)
         })
     },
     created() {

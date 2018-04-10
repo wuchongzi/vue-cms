@@ -9,7 +9,6 @@ export const searchData = (vm, url) => {
         name: vm.$route.name,
         pars: vm.pars
     });
-    console.log(vm.$store.state.search.cachePars)
     // 查询请求
     let params = {
         pageNum: vm.pars.pageNum,
