@@ -16,13 +16,14 @@ module.exports = {
          */
         proxyTable: {
             "/boss-web": {
-                target: "http://10.100.2.61:8080", // F
+                // target: "http://10.100.2.61:8080", // 开发环境地址
+                target: "http://192.168.20.142:9005", // JYR本地IP
                 changeOrigin: true,
                 secure: false, // https必须，false——不验证证书
-                // pathRewrite: {
-                //     // 去掉api标识fetch
-                //     "^/boss-web": ""
-                // }
+                pathRewrite: {
+                    // 去掉api标识fetch
+                    "^/boss-web": ""
+                }
             }
         },
 

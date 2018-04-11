@@ -2,54 +2,54 @@
     <div class="page">
         <!-- search -->
         <Card :bordered="false" class="card-search" shadow>
-            <Form ref="searchForm" :model="pars.filter" :label-width="120" size="large">
+            <Form ref="searchForm" :model="pars" :label-width="120" size="large">
                 <Row :gutter="10">
                     <Col span="12">
                     <FormItem label="时间：" prop="timeType">
-                        <RadioGroup v-model="pars.filter.timeType">
+                        <RadioGroup v-model="pars.timeType">
                             <Radio label="0">订单创建时间</Radio>
                             <Radio label="1">订单完成时间</Radio>
                         </RadioGroup>
                     </FormItem>
                     </Col>
                     <Col span="12">
-                    <FormItem label="时间范围：" prop="timeRange">
-                        <DatePicker type="datetimerange" placeholder="请选择" v-model="pars.filter.timeRange" split-panels :editable="false" placement="bottom-end" transfer @on-change="timeRangeChange" class="datetimerange-s"></DatePicker>
+                    <FormItem label="时间范围：" prop="timeArray">
+                        <DatePicker type="datetimerange" placeholder="请选择" v-model="pars.timeArray" split-panels :editable="false" placement="bottom-end" transfer @on-change="timeRangeChange" class="datetimerange-s"></DatePicker>
                     </FormItem>
                     </Col>
                 </Row>
                 <Row :gutter="10">
                     <Col span="8">
-                    <FormItem label="商户号：" prop="accountId">
-                        <Input v-model="pars.filter.accountId" class="search-item" placeholder="请输入"></Input>
+                    <FormItem label="商户号：" prop="merchantCode">
+                        <Input v-model="pars.merchantCode" class="search-item" placeholder="请输入"></Input>
                     </FormItem>
                     </Col>
                     <Col span="8">
-                    <FormItem label="商户订单号：" prop="orderId">
-                        <Input v-model="pars.filter.orderId" class="search-item" placeholder="请输入"></Input>
+                    <FormItem label="商户订单号：" prop="merchantOrderId">
+                        <Input v-model="pars.merchantOrderId" class="search-item" placeholder="请输入"></Input>
                     </FormItem>
                     </Col>
                     <Col span="8">
-                    <FormItem label="订单交易流水号：" prop="paymentId">
-                        <Input v-model="pars.filter.paymentId" class="search-item" placeholder="请输入"></Input>
+                    <FormItem label="订单交易流水号：" prop="orderNo">
+                        <Input v-model="pars.orderNo" class="search-item" placeholder="请输入"></Input>
                     </FormItem>
                     </Col>
                 </Row>
                 <Row :gutter="10">
                     <Col span="8">
-                    <FormItem label="订单金额：" prop="accountId">
+                    <FormItem label="订单金额：" prop="merchantCode">
                         <div class="amount-range">
-                            <InputNumber class="search-number" v-model="pars.filter.amountMin" :step="10" :min="0">
+                            <InputNumber class="search-number" :min="0" v-model="pars.orderAmountMin" :step="10">
                             </InputNumber>
                             <span class="line">-</span>
-                            <InputNumber class="search-number" v-model="pars.filter.amountMax" :step="10" :min="0">
+                            <InputNumber class="search-number" :min="0" v-model="pars.orderAmountMax" :step="10">
                             </InputNumber>
                         </div>
                     </FormItem>
                     </Col>
                     <Col span="8">
                     <FormItem label="订单状态：" prop="status">
-                        <Select v-model="pars.filter.status" class="search-item" placeholder="请选择">
+                        <Select v-model="pars.status" class="search-item" placeholder="请选择">
                             <Option value="0">全部</Option>
                             <Option value="1">已完成</Option>
                             <Option value="2">已取消</Option>
@@ -91,17 +91,27 @@ export default {
     components: { expandRow },
     data() {
         return {
+            parsDefault: {
+                timeType: "0", // 时间类型
+                timeArray: ["", ""], // 时间范围
+                merchantCode: "", // 商户号
+                merchantOrderId: "", // 商户订单号
+                orderNo: "", // 订单交易流水号
+                orderAmountMin: null, // 最小订单金额
+                orderAmountMax: null, // 最大订单金额
+                status: "", // 订单状态
+                pageNum: 1, // 页码
+                pageSize: 10 // 每页条数
+            },
             pars: {
-                filter: {
-                    timeType: "0", // 时间类型
-                    timeRange: ["", ""], // 时间范围
-                    accountId: "", // 商户号
-                    orderId: "", // 商户订单号
-                    paymentId: "", // 订单交易流水号
-                    amountMin: 0, // 最小订单金额
-                    amountMax: 0, // 最大订单金额
-                    status: "" // 订单状态
-                },
+                timeType: "0", // 时间类型
+                timeArray: ["", ""], // 时间范围
+                merchantCode: "", // 商户号
+                merchantOrderId: "", // 商户订单号
+                orderNo: "", // 订单交易流水号
+                orderAmountMin: null, // 最小订单金额
+                orderAmountMax: null, // 最大订单金额
+                status: "", // 订单状态
                 pageNum: 1, // 页码
                 pageSize: 10 // 每页条数
             },
@@ -128,15 +138,15 @@ export default {
                 },
                 {
                     title: "商户号",
-                    key: "accountId"
+                    key: "merchantCode"
                 },
                 {
                     title: "商户订单号",
-                    key: "orderId"
+                    key: "merchantOrderId"
                 },
                 {
                     title: "订单交易流水号",
-                    key: "paymentId"
+                    key: "orderNo"
                 },
                 {
                     title: "订单金额（元）",
@@ -253,11 +263,12 @@ export default {
         // 时间范围变更，格式化返回值
         timeRangeChange(val) {
             console.log(val);
-            // this.pars.filter.timeRange = val;
+            // this.pars.timeArray = val;
         },
         // 查询请求
         doSearch() {
-            searchData(this, API.orderSearch);
+            let vm = this;
+            searchData(vm, API.orderSearch, vm.pars);
         },
         // 查询按钮查询
         handleSearch() {
@@ -291,25 +302,12 @@ export default {
         },
         // 点击查看交易明细
         linkDetails(params) {
+            let cachePars = Object.assign(this.parsDefault,{
+                merchantOrderId: params.row.merchantOrderId, // 商户订单号
+            })
             this.$store.dispatch("saveCachePars", {
                 name: "tradeSearch",
-                pars: {
-                    filter: {
-                        timeType: "0", // 时间类型
-                        timeRange: "", // 时间范围
-                        accountId: "", // 商户号
-                        orderId: params.row.orderId, // 商户订单号
-                        tradeId: "", // 对账流水号
-                        acquiringName: "", // 收单机构
-                        product: "", // 产品
-                        payType: "", // 支付方式
-                        amountMin: 0, // 最小订单金额
-                        amountMax: 0, // 最大订单金额
-                        status: "" // 支付状态
-                    },
-                    pageNum: 1, // 页码
-                    pageSize: 10 // 每页条数
-                }
+                pars: cachePars
             });
             this.$router.push({
                 name: "tradeSearch"

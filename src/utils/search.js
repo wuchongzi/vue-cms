@@ -3,18 +3,12 @@
  * @description 查询列表页面公共方法封装
  */
 
-export const searchData = (vm, url) => {
+export const searchData = (vm, url, params) => {
     // 缓存查询参数
     vm.$store.dispatch("saveCachePars", {
         name: vm.$route.name,
         pars: vm.pars
     });
-    // 查询请求
-    let params = {
-        pageNum: vm.pars.pageNum,
-        pageSize: vm.pars.pageSize,
-        ...vm.pars.filter
-    };
     vm.tableLoading = true;
     return new Promise((resolve, reject) => {
         vm.$http

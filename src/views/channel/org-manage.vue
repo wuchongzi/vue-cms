@@ -62,8 +62,8 @@ export default {
                 filter: {
                     orgName: "" // 收单机构名称
                 },
-                pageNum: 1, // 页码
-                pageSize: 10 // 每页条数
+                pageNum: "1", // 页码
+                pageSize: "10" // 每页条数
             },
             tableLoading: false,
             pageSizeOpts: [10, 20, 30, 50],
@@ -250,8 +250,8 @@ export default {
         },
         // 查询按钮查询
         handleSearch() {
-            this.pars.pageNum = 1;
-            this.pars.pageSize = 10;
+            this.pars.pageNum = "1";
+            this.pars.pageSize = "10";
             this.doSearch();
         },
         // 页码变更查询
