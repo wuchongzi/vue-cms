@@ -9,7 +9,7 @@
                 <Page :total="tableDataTotal" :current.sync="pars.pageNum" :page-size="pars.pageSize" show-total @on-change="pageChange"></Page>
             </div>
         </Card>
-        <Modal v-model="roleEdit" title="编辑角色" ok-text="保存" @on-ok="roleEditSave" @on-cancel="roleEditCancel" :loading="okLoading" :mask-closable="false">
+        <Modal v-model="roleEdit" :styles="modalTopStyle" title="编辑角色" ok-text="保存" @on-ok="roleEditSave" @on-cancel="roleEditCancel" :loading="okLoading" :mask-closable="false">
             <div class="modal-inner">
                 <Tree ref="menuTree" :data="menuTreeData" @on-check-change="menuTreeChecked" show-checkbox></Tree>
             </div>
@@ -22,6 +22,7 @@ export default {
     name: "roleManage",
     data() {
         return {
+            modalTopStyle: this.$config.modalTopStyle,
             pars: {
                 pageNum: 1, // 页码
                 pageSize: 15 // 每页条数

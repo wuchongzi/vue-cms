@@ -195,7 +195,7 @@ export default {
                     key: "orderTime",
                     render: (h, params) => {
                         if (!params.row.orderTime) {
-                            return "-";
+                            return h("span", "暂无");
                         } else {
                             let dateObj = new Date(params.row.orderTime);
                             return h(
@@ -255,7 +255,7 @@ export default {
             console.log(val);
             // this.pars.filter.timeRange = val;
         },
-        // 查询操作
+        // 查询请求
         doSearch() {
             searchData(this, API.orderSearch);
         },
@@ -277,6 +277,7 @@ export default {
         // 查询表单重置
         handleReset() {
             this.$refs.searchForm.resetFields();
+            this.handleSearch()
         },
         // 页面初始化
         pageInit() {

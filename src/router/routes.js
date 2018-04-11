@@ -62,13 +62,13 @@ export const menuRoutes = [
                 path: "order-search",
                 name: "orderSearch",
                 meta: { title: "订单查询" },
-                component: () => import("@/views/order/order-search.vue")
+                component: () => import("@/views/order/order-search")
             },
             {
                 path: "trade-search",
                 name: "tradeSearch",
                 meta: { title: "交易查询" },
-                component: () => import("@/views/order/trade-search.vue")
+                component: () => import("@/views/order/trade-search")
             }
         ]
     },
@@ -82,7 +82,21 @@ export const menuRoutes = [
                 path: "role-manage",
                 name: "roleManage",
                 meta: { title: "角色管理" },
-                component: () => import("@/views/system/role-manage.vue")
+                component: () => import("@/views/system/role-manage")
+            }
+        ]
+    },
+    {
+        path: "/channel",
+        name: "channel",
+        meta: { title: "渠道管理", icon: "gear-b", isSubMenu: true },
+        component: Layout,
+        children: [
+            {
+                path: "org-manage",
+                name: "orgManage",
+                meta: { title: "收单机构管理" },
+                component: () => import("@/views/channel/org-manage")
             }
         ]
     }

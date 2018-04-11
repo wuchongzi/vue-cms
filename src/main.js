@@ -10,6 +10,7 @@ import "iview/dist/styles/iview.css";
 
 Vue.use(iView);
 
+// axios全局配置引入
 import Request from "@/utils/http";
 const axiosPlugin = {
     install: function(Vue, Option) {
@@ -19,6 +20,17 @@ const axiosPlugin = {
     }
 };
 Vue.use(axiosPlugin)
+
+// 全局变量配置
+import { appConfig } from '@/config';
+const appConfigPlugin = {
+    install: function(Vue, Option) {
+        Object.defineProperty(Vue.prototype, "$config", {
+            value: appConfig
+        });
+    }
+};
+Vue.use(appConfigPlugin)
 
 Vue.config.productionTip = false;
 Vue.config.debug = true;
