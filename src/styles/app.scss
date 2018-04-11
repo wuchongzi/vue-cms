@@ -52,6 +52,11 @@ p {
         padding: 20px 20px 10px 50px;
     }
 }
-.ivu-modal .ivu-btn-text:focus {
-    box-shadow: none;
+.ivu-modal {
+    .ivu-btn-text:focus {
+        box-shadow: none;
+    }
+    .ivu-form-item-label {
+        padding-right: 10px;
+    }
 }
