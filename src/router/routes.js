@@ -97,6 +97,12 @@ export const menuRoutes = [
                 name: "orgManage",
                 meta: { title: "收单机构管理" },
                 component: () => import("@/views/channel/org-manage")
+            },
+            {
+                path: "channel-manage",
+                name: "channelManage",
+                meta: { title: "通道管理" },
+                component: () => import("@/views/channel/channel-manage")
             }
         ]
     }

@@ -2,21 +2,56 @@
     <div class="page">
         <!-- search -->
         <Card :bordered="false" class="card-search" shadow>
-            <Form ref="searchForm" :model="pars" inline size="large">
-                <FormItem prop="accountId">
-                    <Input v-model="pars.orgName" class="search-item" placeholder="请输入收单机构名称"></Input>
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" @click="handleSearch">查询</Button>
-                    <Button style="margin-left: 8px" @click="handleReset">重置</Button>
-                </FormItem>
+            <Form ref="searchForm" :model="pars" :label-width="120" size="large">
+                <Row :gutter="10">
+                    <Col span="8">
+                    <FormItem label="所属收单机构：" prop="belongOrganization">
+                        <Select v-model="pars.belongOrganization" class="search-item" placeholder="请选择">
+                            <Option value="1">1</Option>
+                            <Option value="2">2</Option>
+                            <Option value="3">3</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="通道名称：" prop="name">
+                        <Select v-model="pars.name" class="search-item" placeholder="请选择">
+                            <Option value="1">1</Option>
+                            <Option value="2">2</Option>
+                            <Option value="3">3</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="通道号：" prop="channelId">
+                        <Input v-model="pars.channelId" class="search-item" placeholder="请输入"></Input>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row :gutter="10">
+                    <Col span="8">
+                    <FormItem label="通道状态：" prop="states">
+                        <Select v-model="pars.states" class="search-item" placeholder="请选择">
+                            <Option value="1">1</Option>
+                            <Option value="2">2</Option>
+                            <Option value="3">3</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="">
+                        <Button type="primary" @click="handleSearch">查询</Button>
+                        <Button style="margin-left: 8px" @click="handleReset">重置</Button>
+                    </FormItem>
+                    </Col>
+                </Row>
             </Form>
         </Card>
 
         <!-- table -->
         <Card :bordered="false" class="card-table" shadow>
             <div class="table-options">
-                <Button type="primary" icon="plus" @click="handleCreate">创建收单机构</Button>
+                <Button type="primary" icon="plus" @click="handleCreate">通道新增</Button>
             </div>
             <Table :columns="tableColumns" :data="tableData" :loading="tableLoading"></Table>
             <div class="table-page">
@@ -32,17 +67,24 @@
             </div>
             <div class="modal-inner">
                 <Form ref="formCreate" :model="parsCreate" :rules="ruleCreate" :label-width="120">
-                    <FormItem label="收单机构性质：" prop="orgProperty">
-                        <Select class="form-el" v-model="parsCreate.orgProperty" placeholder="请选择">
+                    <FormItem label="所属收单机构：" prop="belongOrganization">
+                        <Select class="form-el" v-model="parsCreate.belongOrganization" placeholder="请选择">
                             <Option value="0">机构</Option>
                             <Option value="1">银行</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="收单机构名称：" prop="orgName">
-                        <Input class="form-el" v-model="parsCreate.orgName" placeholder="请输入"></Input>
+                    <FormItem label="通道状态：" prop="states">
+                        <Select class="form-el" v-model="parsCreate.states" placeholder="请选择">
+                            <Option value="1">1</Option>
+                            <Option value="2">2</Option>
+                            <Option value="3">3</Option>
+                        </Select>
                     </FormItem>
-                    <FormItem label="收单机构简称：" prop="orgShortName">
-                        <Input class="form-el" v-model="parsCreate.orgShortName" placeholder="请输入"></Input>
+                    <FormItem label="通道名称：" prop="name">
+                        <Input class="form-el" v-model="parsCreate.name" placeholder="请输入"></Input>
+                    </FormItem>
+                    <FormItem label="通道描述：" prop="descriptions">
+                        <Input class="form-textarea" type="textarea" :rows="3" v-model="parsCreate.descriptions" placeholder="请输入" maxlength="100"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -59,7 +101,10 @@ export default {
     data() {
         return {
             pars: {
-                orgName: "", // 收单机构名称
+                belongOrganization: null, // 收单机构
+                name: null, // 通道名称
+                channelId: null, // 通道号
+                states: null, // 通道状态
                 pageNum: 1, // 页码
                 pageSize: 10 // 每页条数
             },
@@ -74,36 +119,27 @@ export default {
                     align: "center"
                 },
                 {
-                    title: "收单机构编码",
-                    key: "orgId",
+                    title: "通道号",
+                    key: "channelId",
                     width: 90
                 },
                 {
-                    title: "收单机构名称",
-                    key: "orgName"
+                    title: "通道名称",
+                    key: "name"
                 },
                 {
-                    title: "收单机构简称",
-                    key: "orgShortName",
-                    width: 90
+                    title: "通道描述",
+                    key: "descriptions",
+                    width: 200
                 },
                 {
-                    title: "收单机构性质",
-                    key: "orgProperty",
-                    width: 120,
-                    render: (h, params) => {
-                        let thisRow = params.row;
-                        return h(
-                            "span",
-                            thisRow.orderAmount
-                                ? formatThousand(thisRow.orderAmount)
-                                : ""
-                        );
-                    }
+                    title: "所属收单机构",
+                    key: "belongOrganization",
+                    width: 100
                 },
                 {
-                    title: "机构状态",
-                    key: "status",
+                    title: "通道状态",
+                    key: "states",
                     width: 100,
                     render: (h, params) => {
                         const row = params.row;
@@ -203,38 +239,39 @@ export default {
             ],
             tableData: [],
             modalCreate: {
-                title: "创建收单机构",
+                title: "通道新增",
                 visible: false,
                 okLoading: false,
-                width: 500,
+                width: 600,
                 styles: {
                     ...this.$config.modalTopStyle
                 }
             },
             parsCreate: {
-                orgProperty: "",
-                orgName: "",
-                orgShortName: ""
+                belongOrganization: null,
+                states: null,
+                name: null,
+                descriptions: null
             },
             ruleCreate: {
-                orgProperty: [
+                belongOrganization: [
                     {
                         required: true,
-                        message: "请选择收单机构性质",
+                        message: "请选择收单机构",
                         trigger: "change"
                     }
                 ],
-                orgName: [
+                states: [
                     {
                         required: true,
-                        message: "请输入收单机构名称",
-                        trigger: "blur"
+                        message: "请选择通道状态",
+                        trigger: "change"
                     }
                 ],
-                orgShortName: [
+                name: [
                     {
                         required: true,
-                        message: "请输入收单机构简称",
+                        message: "请输入通道名称",
                         trigger: "blur"
                     }
                 ]
@@ -346,6 +383,9 @@ export default {
 .modal-inner {
     .form-el {
         width: 200px;
+    }
+    .form-textarea {
+        width: 340px;
     }
 }
 </style>
