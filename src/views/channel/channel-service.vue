@@ -2,21 +2,68 @@
     <div class="page">
         <!-- search -->
         <Card :bordered="false" class="card-search" shadow>
-            <Form ref="searchForm" :model="pars" inline size="large">
-                <FormItem prop="accountId">
-                    <Input v-model="pars.orgName" class="search-item" placeholder="请输入收单机构名称"></Input>
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" @click="handleSearch">查询</Button>
-                    <Button style="margin-left: 8px" @click="handleReset">重置</Button>
-                </FormItem>
+            <Form ref="searchForm" :model="pars" :label-width="120" size="large">
+                <Row :gutter="10">
+                    <Col span="8">
+                    <FormItem label="所属收单机构：" prop="belongOrganization">
+                        <Select v-model="pars.belongOrganization" class="search-item" placeholder="请选择">
+                            <Option value="1">1</Option>
+                            <Option value="2">2</Option>
+                            <Option value="3">3</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="所属通道名称：" prop="belongChannelName">
+                        <Select v-model="pars.name" class="search-item" placeholder="请选择">
+                            <Option value="1">1</Option>
+                            <Option value="2">2</Option>
+                            <Option value="3">3</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="通道业务：" prop="channelServiceName">
+                        <Select v-model="pars.name" class="search-item" placeholder="请选择">
+                            <Option value="1">1</Option>
+                            <Option value="2">2</Option>
+                            <Option value="3">3</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row :gutter="10">
+                    <Col span="8">
+                    <FormItem label="通道业务类型：" prop="channelServiceType">
+                        <Select v-model="pars.status" class="search-item" placeholder="请选择">
+                            <Option value="1">收单</Option>
+                            <Option value="2">出款</Option>
+                            <Option value="3">下载对账单</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="通道业务状态：" prop="status">
+                        <Select v-model="pars.status" class="search-item" placeholder="请选择">
+                            <Option value="1">有效</Option>
+                            <Option value="2">无效</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="8">
+                    <FormItem label="">
+                        <Button type="primary" @click="handleSearch">查询</Button>
+                        <Button style="margin-left: 8px" @click="handleReset">重置</Button>
+                    </FormItem>
+                    </Col>
+                </Row>
             </Form>
         </Card>
 
         <!-- table -->
         <Card :bordered="false" class="card-table" shadow>
             <div class="table-options">
-                <Button type="primary" icon="plus" @click="handleCreate">创建收单机构</Button>
+                <Button type="primary" icon="plus" @click="handleCreate">新增通道业务</Button>
             </div>
             <Table :columns="tableColumns" :data="tableData" :loading="tableLoading"></Table>
             <div class="table-page">
@@ -32,17 +79,55 @@
             </div>
             <div class="modal-inner">
                 <Form ref="formCreate" :model="parsCreate" :rules="ruleCreate" :label-width="120">
-                    <FormItem label="收单机构性质：" prop="orgProperty">
-                        <Select class="form-el" v-model="parsCreate.orgProperty" placeholder="请选择">
-                            <Option value="0">机构</Option>
-                            <Option value="1">银行</Option>
+                    <Row :gutter="10">
+                        <Col span="12">
+                        <FormItem label="所属通道名称：" prop="belongChannelName">
+                            <Select class="form-el" v-model="parsCreate.belongChannelName" placeholder="请选择">
+                                <Option value="0">机构</Option>
+                                <Option value="1">银行</Option>
+                            </Select>
+                        </FormItem>
+                        </Col>
+                        <Col span="12">
+                        <FormItem label="收单终端号：" prop="terminalId">
+                            <Input class="form-el" v-model="parsCreate.terminalId" placeholder="请输入"></Input>
+                        </FormItem>
+                        </Col>
+                    </Row>
+                    <Row :gutter="10">
+                        <Col span="12">
+                        <FormItem label="通道业务类型：" prop="channelServiceType">
+                            <Select class="form-el" v-model="parsCreate.channelServiceType" placeholder="请选择">
+                                <Option value="0">收单</Option>
+                                <Option value="1">出款</Option>
+                                <Option value="2">下载对账单</Option>
+                            </Select>
+                        </FormItem>
+                        </Col>
+                        <Col span="12">
+                        <FormItem label="通道业务：" prop="channelServiceName">
+                            <Select class="form-el" v-model="parsCreate.channelServiceName" placeholder="请选择">
+                                <Option value="0">网银</Option>
+                                <Option value="1">微信支付</Option>
+                                <Option value="2">微信H5</Option>
+                                <Option value="3">付款</Option>
+                                <Option value="4">微信H5</Option>
+                            </Select>
+                        </FormItem>
+                        </Col>
+                    </Row>
+                    <FormItem label="通道状态：" prop="status">
+                        <Select class="form-el" v-model="parsCreate.status" placeholder="请选择">
+                            <Option value="1">1</Option>
+                            <Option value="2">2</Option>
+                            <Option value="3">3</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="收单机构名称：" prop="orgName">
-                        <Input class="form-el" v-model="parsCreate.orgName" placeholder="请输入"></Input>
+                    <FormItem label="通道名称：" prop="name">
+                        <Input class="form-el" v-model="parsCreate.name" placeholder="请输入"></Input>
                     </FormItem>
-                    <FormItem label="收单机构简称：" prop="orgShortName">
-                        <Input class="form-el" v-model="parsCreate.orgShortName" placeholder="请输入"></Input>
+                    <FormItem label="通道描述：" prop="descriptions">
+                        <Input class="form-textarea" type="textarea" :rows="3" v-model="parsCreate.descriptions" placeholder="请输入" :maxlength="100"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -59,7 +144,11 @@ export default {
     data() {
         return {
             pars: {
-                orgName: "", // 收单机构名称
+                belongOrganization: null, // 所属收单机构
+                belongChannelName: null, // 所属通道名称
+                channelServiceName: null, // 通道业务名称
+                channelServiceType: null, // 通道业务类型
+                status: null, // 通道业务状态
                 pageNum: 1, // 页码
                 pageSize: 10 // 每页条数
             },
@@ -74,35 +163,32 @@ export default {
                     align: "center"
                 },
                 {
-                    title: "收单机构编码",
-                    key: "orgId",
+                    title: "所属通道号",
+                    key: "belongChannel",
                     width: 90
                 },
                 {
-                    title: "收单机构名称",
-                    key: "orgName"
+                    title: "所属通道名称",
+                    key: "belongChannelName"
                 },
                 {
-                    title: "收单机构简称",
-                    key: "orgShortName",
-                    width: 90
+                    title: "通道业务编码",
+                    key: "channelServiceId"
                 },
                 {
-                    title: "收单机构性质",
-                    key: "orgProperty",
-                    width: 120,
-                    render: (h, params) => {
-                        let thisRow = params.row;
-                        return h(
-                            "span",
-                            thisRow.orderAmount
-                                ? formatThousand(thisRow.orderAmount)
-                                : ""
-                        );
-                    }
+                    title: "通道业务类型",
+                    key: "channelServiceType"
                 },
                 {
-                    title: "机构状态",
+                    title: "通道业务",
+                    key: "channelServiceName"
+                },
+                {
+                    title: "所属收单机构",
+                    key: "belongOrganization"
+                },
+                {
+                    title: "通道业务状态",
                     key: "status",
                     width: 100,
                     render: (h, params) => {
@@ -112,11 +198,11 @@ export default {
                         switch (row.status) {
                             case "1":
                                 color = "green";
-                                text = "已完成";
+                                text = "有效";
                                 break;
                             case "2":
                                 color = "red";
-                                text = "已取消";
+                                text = "无效";
                                 break;
                             default:
                                 color = "";
@@ -127,52 +213,11 @@ export default {
                             "Tag",
                             {
                                 props: {
-                                    // type: "dot",
                                     color: color
                                 }
                             },
                             text
                         );
-                    }
-                },
-                {
-                    title: "创建人",
-                    key: "creatBy",
-                    width: 80
-                },
-                {
-                    title: "创建时间",
-                    key: "orderTime",
-                    render: (h, params) => {
-                        if (!params.row.orderTime) {
-                            return h("span", "暂无");
-                        } else {
-                            let dateObj = new Date(params.row.orderTime);
-                            return h(
-                                "span",
-                                formatDate(dateObj, "yyyy-MM-dd hh:mm:ss")
-                            );
-                        }
-                    }
-                },
-                {
-                    title: "修改人",
-                    key: "updateBy",
-                    width: 80
-                },
-                {
-                    title: "修改时间",
-                    key: "upateTime",
-                    render: (h, params) => {
-                        if (!params.row.orderFinishTime) {
-                            return h("span", "暂无");
-                        } else {
-                            let dateObj = new Date(params.row.orderFinishTime);
-                            return h(
-                                "span",
-                                formatDate(dateObj, "yyyy-MM-dd hh:mm:ss")
-                            );
-                        }
                     }
                 },
                 {
@@ -203,38 +248,39 @@ export default {
             ],
             tableData: [],
             modalCreate: {
-                title: "创建收单机构",
+                title: "新增通道业务",
                 visible: false,
                 okLoading: false,
-                width: 500,
+                width: 800,
                 styles: {
                     ...this.$config.modalStyles
                 }
             },
             parsCreate: {
-                orgProperty: "",
-                orgName: "",
-                orgShortName: ""
+                belongOrganization: null,
+                status: null,
+                name: null,
+                descriptions: null
             },
             ruleCreate: {
-                orgProperty: [
+                belongOrganization: [
                     {
                         required: true,
-                        message: "请选择收单机构性质",
+                        message: "请选择收单机构",
                         trigger: "change"
                     }
                 ],
-                orgName: [
+                status: [
                     {
                         required: true,
-                        message: "请输入收单机构名称",
-                        trigger: "blur"
+                        message: "请选择通道状态",
+                        trigger: "change"
                     }
                 ],
-                orgShortName: [
+                name: [
                     {
                         required: true,
-                        message: "请输入收单机构简称",
+                        message: "请输入通道名称",
                         trigger: "blur"
                     }
                 ]
@@ -332,7 +378,7 @@ export default {
         },
         // 取消创建
         createCancel() {
-            this.closeCreateModal()
+            this.closeCreateModal();
         }
     },
     created() {
@@ -345,6 +391,9 @@ export default {
 .modal-inner {
     .form-el {
         width: 200px;
+    }
+    .form-textarea {
+        width: 340px;
     }
 }
 </style>

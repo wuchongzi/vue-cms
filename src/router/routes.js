@@ -103,6 +103,12 @@ export const menuRoutes = [
                 name: "channelManage",
                 meta: { title: "通道管理" },
                 component: () => import("@/views/channel/channel-manage")
+            },
+            {
+                path: "channel-service",
+                name: "channelService",
+                meta: { title: "通道业务" },
+                component: () => import("@/views/channel/channel-service")
             }
         ]
     }

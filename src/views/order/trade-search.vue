@@ -335,6 +335,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "../../styles/page.scss";
+<style lang="scss" scoped>
+
 </style>

@@ -3,7 +3,13 @@
  */
 export const appConfig = {
     // 弹窗top值
-    modalTopStyle: {
+    modalStyles: {
         top: '15vh'
     }
+}
+
+export const API = {
+    login: 'boss/login', // 登录
+    orderSearch: 'order/queryOrder', // 订单查询
+    tradeSearch: 'payment/queryPaymentDetail' // 交易查询
 }

@@ -30,8 +30,8 @@
                 </Row>
                 <Row :gutter="10">
                     <Col span="8">
-                    <FormItem label="通道状态：" prop="states">
-                        <Select v-model="pars.states" class="search-item" placeholder="请选择">
+                    <FormItem label="通道状态：" prop="status">
+                        <Select v-model="pars.status" class="search-item" placeholder="请选择">
                             <Option value="1">1</Option>
                             <Option value="2">2</Option>
                             <Option value="3">3</Option>
@@ -73,8 +73,8 @@
                             <Option value="1">银行</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="通道状态：" prop="states">
-                        <Select class="form-el" v-model="parsCreate.states" placeholder="请选择">
+                    <FormItem label="通道状态：" prop="status">
+                        <Select class="form-el" v-model="parsCreate.status" placeholder="请选择">
                             <Option value="1">1</Option>
                             <Option value="2">2</Option>
                             <Option value="3">3</Option>
@@ -84,7 +84,7 @@
                         <Input class="form-el" v-model="parsCreate.name" placeholder="请输入"></Input>
                     </FormItem>
                     <FormItem label="通道描述：" prop="descriptions">
-                        <Input class="form-textarea" type="textarea" :rows="3" v-model="parsCreate.descriptions" placeholder="请输入" maxlength="100"></Input>
+                        <Input class="form-textarea" type="textarea" :rows="3" v-model="parsCreate.descriptions" placeholder="请输入" :maxlength="100"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -104,7 +104,7 @@ export default {
                 belongOrganization: null, // 收单机构
                 name: null, // 通道名称
                 channelId: null, // 通道号
-                states: null, // 通道状态
+                status: null, // 通道状态
                 pageNum: 1, // 页码
                 pageSize: 10 // 每页条数
             },
@@ -139,7 +139,7 @@ export default {
                 },
                 {
                     title: "通道状态",
-                    key: "states",
+                    key: "status",
                     width: 100,
                     render: (h, params) => {
                         const row = params.row;
@@ -244,12 +244,12 @@ export default {
                 okLoading: false,
                 width: 600,
                 styles: {
-                    ...this.$config.modalTopStyle
+                    ...this.$config.modalStyles
                 }
             },
             parsCreate: {
                 belongOrganization: null,
-                states: null,
+                status: null,
                 name: null,
                 descriptions: null
             },
@@ -261,7 +261,7 @@ export default {
                         trigger: "change"
                     }
                 ],
-                states: [
+                status: [
                     {
                         required: true,
                         message: "请选择通道状态",
@@ -378,8 +378,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import "../../styles/page.scss";
+<style lang="scss">
 .modal-inner {
     .form-el {
         width: 200px;
