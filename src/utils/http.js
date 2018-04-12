@@ -8,17 +8,20 @@ import Vue from "vue";
 
 import Auth from "@/utils/auth";
 
-// 创建axios实例
+/**
+ * 第一步：创建axios实例
+ */
 const service = axios.create({
     baseURL: process.env.BASE_API, // api的base_url
     timeout: 15000, // 请求超时时间
-    responseType: "json",
-    // headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    // }
+    responseType: "json" // 服务器响应的数据类型，默认json
 });
-// 单独设置header
-service.defaults.headers.post["Content-Type"] = "application/json"
+
+/**
+ * 第二步：实例创建后修改实例默认值
+ */
+// post请求头类型修改，默认是 application/x-www-form-urlencoded
+service.defaults.headers.post["Content-Type"] = "application/json";
 
 // 添加请求拦截器
 service.interceptors.request.use(
@@ -62,4 +65,4 @@ service.interceptors.response.use(
     }
 );
 
-export default service
+export default service;

@@ -16,7 +16,7 @@
         <!-- table -->
         <Card :bordered="false" class="card-table" shadow>
             <div class="table-options">
-                <Button type="primary" icon="plus" @click="handleCreate">创建收单机构</Button>
+                <Button type="primary" icon="plus" @click="handleCreate">新增收单机构</Button>
             </div>
             <Table :columns="tableColumns" :data="tableData" :loading="tableLoading"></Table>
             <div class="table-page">
@@ -202,7 +202,7 @@ export default {
             ],
             tableData: [],
             modalCreate: {
-                title: "创建收单机构",
+                title: "新增收单机构",
                 visible: false,
                 okLoading: false,
                 width: 500,
