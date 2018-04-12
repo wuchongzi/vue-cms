@@ -3,7 +3,7 @@
         <!-- search -->
         <Card :bordered="false" class="card-search" shadow>
             <Form ref="searchForm" :model="pars" :label-width="120" size="large">
-                <Row :gutter="8">
+                <Row :gutter="searchGutter">
                     <i-col span="16" class="cals-form-inline">
                         <FormItem label="时间：" prop="timeType">
                             <RadioGroup v-model="pars.timeType">
@@ -20,6 +20,8 @@
                             <Input v-model="pars.merchantCode" class="search-item" placeholder="请输入" clearable></Input>
                         </FormItem>
                     </i-col>
+                </Row>
+                <Row :gutter="searchGutter">
                     <i-col span="8">
                         <FormItem label="商户订单号：" prop="merchantOrderId">
                             <Input v-model="pars.merchantOrderId" class="search-item" placeholder="请输入" clearable></Input>
@@ -47,6 +49,8 @@
                             </Row>
                         </FormItem>
                     </i-col>
+                </Row>
+                <Row :gutter="searchGutter">
                     <i-col span="8">
                         <FormItem label="订单状态：" prop="status">
                             <Select v-model="pars.status" class="search-item" placeholder="请选择" clearable>
@@ -87,6 +91,7 @@ export default {
     components: { expandRow },
     data() {
         return {
+            searchGutter: 8,
             statusOptions: [
                 { value: "1", title: "处理中" },
                 { value: "2", title: "已完成" },
