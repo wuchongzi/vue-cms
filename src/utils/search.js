@@ -32,9 +32,7 @@ export const searchData = (vm, url, params) => {
                 resolve(res);
             })
             .catch(error => {
-                // 查询失败页面状态重置
-                // vm.tableData = [];
-                // vm.tableDataTotal = 0;
+                // 查询失败清除缓存参数
                 vm.$store.dispatch("removeCachePars", vm.$route.name);
                 let message =
                     typeof error === "string" ? error : "查询失败，请稍后重试";

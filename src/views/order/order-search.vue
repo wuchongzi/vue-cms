@@ -71,8 +71,7 @@
         <!-- table -->
         <Card :bordered="false" class="card-table" shadow>
             <div slot="title">
-                <p class="amount-total">合计：
-                    <span>200,000.00</span>&nbsp;元</p>
+                <p>合计：{{orderAmountFormat}}</p>
             </div>
             <Table :columns="tableColumns" :data="tableData" :loading="tableLoading"></Table>
             <div class="table-page">
@@ -250,8 +249,15 @@ export default {
                     }
                 }
             ],
-            tableData: []
+            tableData: [],
+            orderAmount: 0 // 订单总金额
         };
+    },
+    computed: {
+        // 格式化订单总金额
+        orderAmountFormat() {
+            return `${formatThousand(this.orderAmount)} 元`
+        }
     },
     methods: {
         // 时间范围变更，格式化返回值
@@ -262,11 +268,16 @@ export default {
         doSearch() {
             let vm = this;
             let params = Object.assign({}, vm.pars);
+            // 将时间转为时间戳
             params.timeArray = params.timeArray.map(
                 item => (item ? Date.parse(item).toString() : "")
             );
             // console.log('查询参数', params)
-            searchData(vm, vm.$api.orderSearch, params);
+            searchData(vm, vm.$api.orderSearch, params).then(res => {
+                this.orderAmount = res.orderAmount || 0
+            }).catch(error => {
+                this.dataReset()
+            })
         },
         // 查询按钮查询
         handleSearch() {
@@ -298,6 +309,14 @@ export default {
             }
             this.doSearch();
         },
+        // 查询失败数据重置
+        dataReset() {
+            this.tableData = [];
+            this.orderAmount = 0;
+            this.tableDataTotal = 0;
+            this.pars.pageNum = 1;
+            this.pars.pageSize = 10;
+        },
         // 点击查看交易明细
         linkDetails(params) {
             let cachePars = Object.assign(this.parsDefault, {
@@ -318,6 +337,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 </style>

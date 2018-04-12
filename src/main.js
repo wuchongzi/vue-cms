@@ -8,6 +8,8 @@ import store from "./store";
 import iView from "iview";
 import "iview/dist/styles/iview.css";
 
+// import "@/styles/app.scss";
+
 Vue.use(iView);
 
 // axios全局配置引入
