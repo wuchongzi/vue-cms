@@ -109,7 +109,6 @@
 import expandRow from "./components/trade-expand.vue";
 import { formatDate, formatThousand } from "@/utils/util";
 import { searchData } from "@/utils/search";
-import API from "@/api";
 export default {
     name: "tradeSearch",
     components: { expandRow },
@@ -295,7 +294,7 @@ export default {
         },
         // 查询请求
         doSearch() {
-            searchData(this, API.tradeSearch);
+            searchData(this, this.$api.tradeSearch);
         },
         // 查询按钮查询
         handleSearch() {

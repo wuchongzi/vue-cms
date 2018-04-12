@@ -9,7 +9,7 @@ import search from "./modules/search";
 
 import Auth from "@/utils/auth";
 import Request from "@/utils/http";
-import API from "@/api";
+import { API } from "@/config";
 
 Vue.use(Vuex);
 
@@ -29,7 +29,6 @@ const store = new Vuex.Store({
     actions: {
         // 登录
         login(context, params) {
-            params = Object.assign({}, params);
             return new Promise((resolve, reject) => {
                 Request.post(API.login, params)
                     .then(res => {

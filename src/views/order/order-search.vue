@@ -85,7 +85,6 @@
 import expandRow from "./components/order-expand.vue";
 import { formatDate, formatThousand } from "@/utils/util";
 import { searchData } from "@/utils/search";
-import API from "@/api";
 export default {
     name: "orderSearch",
     components: { expandRow },
@@ -268,7 +267,7 @@ export default {
         // 查询请求
         doSearch() {
             let vm = this;
-            searchData(vm, API.orderSearch, vm.pars);
+            searchData(vm, vm.$api.orderSearch, vm.pars);
         },
         // 查询按钮查询
         handleSearch() {
