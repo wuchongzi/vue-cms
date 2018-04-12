@@ -37,8 +37,7 @@ service.interceptors.request.use(
     },
     error => {
         // console.error(error);
-        let message = "网络异常";
-        return Promise.reject(message);
+        return Promise.reject("系统错误");
     }
 );
 
@@ -52,16 +51,14 @@ service.interceptors.response.use(
             return data;
         } else {
             // 请求失败返回 rejected 状态，会被链式 .catch()捕获
-            let errMessage = data.message || "数据异常";
-            return Promise.reject(errMessage);
+            let errorMsg = data.msg || "参数错误";
+            return Promise.reject(errorMsg);
         }
     },
     error => {
-        // console.error(error);
+        console.error(error);
         // 响应无结果，接口调用失败
-        let message = "请求失败";
-        // 直接抛出异常信息
-        return Promise.reject(message);
+        return Promise.reject("请求失败");
     }
 );
 

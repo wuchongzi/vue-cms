@@ -14,7 +14,7 @@
                     </Col>
                     <Col span="12">
                     <FormItem label="时间范围：" prop="timeArray">
-                        <DatePicker type="datetimerange" placeholder="请选择" v-model="pars.timeArray" split-panels :editable="false" placement="bottom-end" transfer @on-change="timeRangeChange" class="datetimerange-s"></DatePicker>
+                        <DatePicker class="datetimerange-s" type="datetimerange" placeholder="请选择" v-model="pars.timeArray" split-panels :editable="false" placement="bottom-end" transfer @on-change="timeRangeChange" clearable></DatePicker>
                     </FormItem>
                     </Col>
                 </Row>
@@ -261,8 +261,7 @@ export default {
     methods: {
         // 时间范围变更，格式化返回值
         timeRangeChange(val) {
-            console.log(val);
-            // this.pars.timeArray = val;
+            this.pars.timeArray = val.map(item => Date.parse(item));
         },
         // 查询请求
         doSearch() {
