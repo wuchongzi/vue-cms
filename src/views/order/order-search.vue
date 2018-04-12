@@ -261,7 +261,8 @@ export default {
     methods: {
         // 时间范围变更，格式化返回值
         timeRangeChange(val) {
-            this.pars.timeArray = val.map(item => Date.parse(item));
+            // 转时间戳
+            this.pars.timeArray = val.map(item => Date.parse(item).toString());
         },
         // 查询请求
         doSearch() {
