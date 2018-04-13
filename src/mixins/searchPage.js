@@ -2,25 +2,24 @@
  * @description 查询页面的全局混入封装
  * @author wuchong
  */
-import axios from "axios";
-// import Request from "@/utils/http";
 export default {
     data() {
         return {
-            searchGutter: 8,
-            searchLoading: false,
+            searchGutter: 8, // 查询表单formItem边距
+            isSearching: false, // table加载状态，同时用来判断是否正在进行查询请求
+            searchBtnLoading: false, // 查询按钮加载状态
             pageSizeOpts: [10, 20, 30, 50], // pageSize可选择项
             tableDataTotal: 0, // 查询结果总条数
             tableData: [], // 查询结果列表
-            searchCancelFn: null // 取消请求
         };
     },
     computed: {},
     methods: {
         searchRequest(url, params) {
             const vm = this;
-            const CancelToken = axios.CancelToken;
-
+            if (vm.isSearching) {
+                return false
+            }
             // 缓存查询参数
             vm.$store.dispatch("saveCachePars", {
                 name: vm.$route.name,
@@ -28,16 +27,12 @@ export default {
             });
 
             // 加载中
-            vm.searchLoading = true;
+            vm.isSearching = true;
 
             // 返回Promise对象
             return new Promise((resolve, reject) => {
                 vm.$http
-                    .post(url, params, {
-                        cancelToken: new CancelToken(function executor(c) {
-                            vm.searchCancelFn = c;
-                        })
-                    })
+                    .post(url, params)
                     .then(res => {
                         // 总条数
                         vm.tableDataTotal = res.data.total;
@@ -55,14 +50,16 @@ export default {
                         //         : [];
 
                         vm.tableData = dataList;
-                        vm.searchLoading = false;
+                        vm.isSearching = false;
                         resolve(res);
                     })
                     .catch(error => {
                         // 查询失败清除缓存参数
                         vm.$store.dispatch("removeCachePars", vm.$route.name);
 
-                        vm.searchLoading = false;
+                        vm.isSearching = false;
+                        vm.tableData = [];
+                        vm.tableDataTotal = 0;
 
                         // 错误信息提示
                         let message =

@@ -18,7 +18,7 @@ const router = new Router({
  * to 进入  from 离开  next 传递
  */
 router.beforeEach((to, from, next) => {
-    console.log('router beforeEach:', to);
+    // console.log('router beforeEach:', to);
     // 启动加载进度条
     iView.LoadingBar.start();
     // 路由拦截

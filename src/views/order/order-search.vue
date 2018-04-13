@@ -78,7 +78,7 @@
                 <Page :total="tableDataTotal" :current.sync="pars.pageNum" :page-size="pars.pageSize" :page-size-opts="pageSizeOpts" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="pageSizeChange"></Page>
             </div>
             <!-- 查询加载loading -->
-            <Spin size="large" fix v-if="searchLoading"></Spin>
+            <Spin size="large" fix v-if="isSearching"></Spin>
         </Card>
     </div>
 </template>
@@ -86,7 +86,6 @@
 <script>
 import expandRow from "./components/order-expand.vue";
 import { formatDate, formatThousand } from "@/utils/util";
-import { searchData } from "@/utils/search";
 import searchPage from "@/mixins/searchPage";
 export default {
     name: "orderSearch",
@@ -124,7 +123,7 @@ export default {
                 //     }
                 // },
                 {
-                    type: 'index',
+                    type: "index",
                     // title: "序号",
                     key: "rowId",
                     width: 60,
@@ -250,13 +249,13 @@ export default {
                     }
                 }
             ],
-            orderAmount: 0, // 订单总金额
+            orderAmount: 0 // 订单总金额
         };
     },
     computed: {
         // 格式化订单总金额
         orderAmountFormat() {
-            return `${formatThousand(this.orderAmount)} 元`
+            return `${formatThousand(this.orderAmount)} 元`;
         }
     },
     methods: {
@@ -276,8 +275,8 @@ export default {
             // console.log('查询参数', params)
 
             this.searchRequest(vm.$api.orderSearch, params).then(res => {
-                this.orderAmount = res.orderAmount || 0
-            })
+                this.orderAmount = res.orderAmount || 0;
+            });
         },
         // 查询按钮查询
         handleSearch() {

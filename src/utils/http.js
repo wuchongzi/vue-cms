@@ -60,7 +60,7 @@ service.interceptors.response.use(
     },
     error => {
         console.error(error);
-        // 接口调用失败、请求超时
+        // 接口调用失败、请求超时等
         return Promise.reject(error);
     }
 );
