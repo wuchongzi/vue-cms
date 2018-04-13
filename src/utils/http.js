@@ -59,7 +59,7 @@ service.interceptors.response.use(
         }
     },
     error => {
-        // console.error(error.code, error.message);
+        console.error(error.code, error.message);
         let errorMsg = error.message || '请求失败，请稍后重试';
         // 请求超时
         if ( error.code == "ECONNABORTED" && error.message.indexOf("timeout") != -1) {

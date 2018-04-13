@@ -74,7 +74,6 @@ export default {
                         if (error === 'false') {
                             console.log('请求被取消')
                         } else {
-                            error = typeof error === 'string' ? error : "查询失败，请稍后重试";
                             vm.$Message.destroy();
                             vm.$Message.error(error);
                         }

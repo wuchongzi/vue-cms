@@ -86,11 +86,8 @@ export default {
                             this.$router.replace({ path: "/" });
                         })
                         .catch(error => {
-                            let message =
-                                typeof error === "string" ? error : "登录失败，请稍后重试";
-                            this.btnLoading = false;
-                            this.$Message.destroy()
-                            this.$Message.error(message);
+                            vm.$Message.destroy();
+                            vm.$Message.error(error);
                         });
 
                     // 模拟登录

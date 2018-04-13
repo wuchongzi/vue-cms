@@ -53,5 +53,12 @@ new Vue({
     el: "#app",
     router,
     store: store,
+    created() {
+        const vm = this;
+        vm.$Message.config({
+            // top: 50,
+            duration: 2
+        });
+    },
     render: h => h(App)
 });
