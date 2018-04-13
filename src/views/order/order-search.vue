@@ -73,7 +73,7 @@
             <div slot="title">
                 <p>合计：{{orderAmountFormat}}</p>
             </div>
-            <Table :columns="tableColumns" :data="tableData" :loading="tableLoading"></Table>
+            <Table :columns="tableColumns" :data="tableData" :loading="tableLoading" stripe></Table>
             <div class="table-page">
                 <Page :total="tableDataTotal" :current.sync="pars.pageNum" :page-size="pars.pageSize" :page-size-opts="pageSizeOpts" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="pageSizeChange"></Page>
             </div>
@@ -250,7 +250,8 @@ export default {
                 }
             ],
             tableData: [],
-            orderAmount: 0 // 订单总金额
+            orderAmount: 0, // 订单总金额,
+            searchCancelFn: null // 取消请求
         };
     },
     computed: {
@@ -266,7 +267,7 @@ export default {
         },
         // 查询请求
         doSearch() {
-            let vm = this;
+            const vm = this;
             let params = Object.assign({}, vm.pars);
             // 将时间转为时间戳
             params.timeArray = params.timeArray.map(
@@ -275,8 +276,6 @@ export default {
             // console.log('查询参数', params)
             searchData(vm, vm.$api.orderSearch, params).then(res => {
                 this.orderAmount = res.orderAmount || 0
-            }).catch(error => {
-                this.dataReset()
             })
         },
         // 查询按钮查询
@@ -284,6 +283,12 @@ export default {
             this.pars.pageNum = 1;
             this.pars.pageSize = 10;
             this.doSearch();
+        },
+        // 查询表单重置
+        handleReset() {
+            // this.$refs.searchForm.resetFields();
+            this.dataReset();
+            this.handleSearch();
         },
         // 页码变更查询
         pageChange() {
@@ -293,11 +298,6 @@ export default {
         pageSizeChange(val) {
             this.pars.pageSize = val;
             this.pars.pageNum === 1 ? this.doSearch() : "";
-        },
-        // 查询表单重置
-        handleReset() {
-            this.$refs.searchForm.resetFields();
-            this.handleSearch();
         },
         // 页面初始化
         pageInit() {
@@ -309,23 +309,8 @@ export default {
             }
             this.doSearch();
         },
-        // 查询失败数据重置
-        dataReset() {
-            this.tableData = [];
-            this.orderAmount = 0;
-            this.tableDataTotal = 0;
-            this.pars.pageNum = 1;
-            this.pars.pageSize = 10;
-        },
         // 点击查看交易明细
         linkDetails(params) {
-            let cachePars = Object.assign(this.parsDefault, {
-                merchantOrderId: params.row.merchantOrderId // 商户订单号
-            });
-            this.$store.dispatch("saveCachePars", {
-                name: "tradeSearch",
-                pars: cachePars
-            });
             this.$router.push({
                 name: "tradeSearch"
             });

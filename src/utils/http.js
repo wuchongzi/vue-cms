@@ -13,7 +13,7 @@ import Auth from "@/utils/auth";
  */
 const service = axios.create({
     baseURL: process.env.BASE_API, // api的base_url
-    timeout: 15000, // 请求超时时间
+    timeout: 10000, // 请求超时时间
     responseType: "json" // 服务器响应的数据类型，默认json
 });
 
@@ -60,8 +60,8 @@ service.interceptors.response.use(
     },
     error => {
         console.error(error);
-        // 响应无结果，接口调用失败
-        return Promise.reject("请求失败");
+        // 接口调用失败、请求超时
+        return Promise.reject(error);
     }
 );
 

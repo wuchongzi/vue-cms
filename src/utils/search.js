@@ -2,8 +2,9 @@
  * @author wuchong
  * @description 查询列表页面公共方法封装
  */
-
+import axios from "axios";
 export const searchData = (vm, url, params) => {
+    const CancelToken = axios.CancelToken;
     // 缓存查询参数
     vm.$store.dispatch("saveCachePars", {
         name: vm.$route.name,
@@ -12,7 +13,11 @@ export const searchData = (vm, url, params) => {
     vm.tableLoading = true;
     return new Promise((resolve, reject) => {
         vm.$http
-            .post(url, params)
+            .post(url, params, {
+                cancelToken: new CancelToken(function executor(c) {
+                    vm.searchCancelFn = c
+                })
+            })
             .then(res => {
                 // 总条数
                 vm.tableDataTotal = res.data.total;
