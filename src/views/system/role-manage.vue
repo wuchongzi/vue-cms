@@ -8,6 +8,7 @@
             <div class="table-page">
                 <Page :total="tableDataTotal" :current.sync="pars.pageNum" :page-size="pars.pageSize" show-total @on-change="pageChange"></Page>
             </div>
+            <Spin size="large" fix v-if="searchLoading"></Spin>
         </Card>
         <Modal v-model="roleEdit" :styles="modalTopStyle" title="编辑角色" ok-text="保存" @on-ok="roleEditSave" @on-cancel="roleEditCancel" :loading="okLoading" :mask-closable="false">
             <div class="modal-inner">
@@ -18,8 +19,10 @@
 </template>
 
 <script>
+import searchPage from "@/mixins/searchPage";
 export default {
     name: "roleManage",
+    mixins: [searchPage],
     data() {
         return {
             modalTopStyle: this.$config.modalTopStyle,
@@ -150,6 +153,9 @@ export default {
         menuTreeChecked(val) {
             console.log(val);
         }
+    },
+    created() {
+
     }
 };
 </script>

@@ -87,12 +87,13 @@
 import expandRow from "./components/order-expand.vue";
 import { formatDate, formatThousand } from "@/utils/util";
 import { searchData } from "@/utils/search";
+import searchPage from "@/mixins/searchPage";
 export default {
     name: "orderSearch",
     components: { expandRow },
+    mixins: [searchPage],
     data() {
         return {
-            searchGutter: 8,
             statusOptions: [
                 { value: "1", title: "处理中" },
                 { value: "2", title: "已完成" },
@@ -110,9 +111,6 @@ export default {
                 pageNum: 1, // 页码
                 pageSize: 10 // 每页条数
             },
-            searchLoading: false,
-            pageSizeOpts: [10, 20, 30, 50],
-            tableDataTotal: 0,
             tableColumns: [
                 // {
                 //     type: "expand",
@@ -126,9 +124,10 @@ export default {
                 //     }
                 // },
                 {
-                    title: "序号",
+                    type: 'index',
+                    // title: "序号",
                     key: "rowId",
-                    width: 80,
+                    width: 60,
                     align: "center"
                 },
                 {
@@ -251,9 +250,7 @@ export default {
                     }
                 }
             ],
-            tableData: [],
-            orderAmount: 0, // 订单总金额,
-            searchCancelFn: null // 取消请求
+            orderAmount: 0, // 订单总金额
         };
     },
     computed: {
@@ -267,16 +264,18 @@ export default {
         timeRangeChange(val) {
             // console.log(val)
         },
-        // 查询请求
+        // 对查询请求再做一次封装，不同查询页面可能需要对查询参数进行不同的处理
         doSearch() {
             const vm = this;
+
+            // 对查询参数处理-将时间转为时间戳
             let params = Object.assign({}, vm.pars);
-            // 将时间转为时间戳
             params.timeArray = params.timeArray.map(
                 item => (item ? Date.parse(item).toString() : "")
             );
             // console.log('查询参数', params)
-            searchData(vm, vm.$api.orderSearch, params).then(res => {
+
+            this.searchRequest(vm.$api.orderSearch, params).then(res => {
                 this.orderAmount = res.orderAmount || 0
             })
         },
@@ -288,16 +287,19 @@ export default {
         },
         // 查询表单重置
         handleReset() {
+            // 注意：重置并不是清空，而是返回到初始状态
             this.$refs.searchForm.resetFields();
         },
         // 页码变更查询
-        pageChange() {
+        pageChange(val) {
+            // 这里组件props加了.sync修饰符，所以不需要手动去给data赋值
             this.doSearch();
         },
         // 每页条数变更查询
         pageSizeChange(val) {
+            // iview这里存在一个bug，当前不是第一页时，改变pageSize会返回第一页触发pageNum改变；当前在第一页时改变pageSize不会触发pageNum改变。这里需要判断当前是否是第一页
             this.pars.pageSize = val;
-            this.pars.pageNum === 1 ? this.doSearch() : "";
+            this.pars.pageNum === 1 || this.doSearch();
         },
         // 页面初始化
         pageInit() {
