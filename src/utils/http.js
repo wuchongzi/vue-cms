@@ -13,7 +13,7 @@ import Auth from "@/utils/auth";
  */
 const service = axios.create({
     baseURL: process.env.BASE_API, // api的base_url
-    timeout: 10000, // 请求超时时间
+    timeout: 8000, // 请求超时时间
     responseType: "json" // 服务器响应的数据类型，默认json
 });
 
@@ -39,8 +39,8 @@ service.interceptors.request.use(
         return config;
     },
     error => {
-        // console.error(error);
-        return Promise.reject("系统错误");
+        console.error(error);
+        return Promise.reject(error);
     }
 );
 
@@ -59,9 +59,17 @@ service.interceptors.response.use(
         }
     },
     error => {
-        console.error(error);
+        // console.error(error.code, error.message);
+        let errorMsg = error.message || '请求失败，请稍后重试';
+        // 请求超时
+        if ( error.code == "ECONNABORTED" && error.message.indexOf("timeout") != -1) {
+            errorMsg = "请求超时"
+        }
+        if (axios.isCancel(error)) {
+            errorMsg = "false"
+        }
         // 接口调用失败、请求超时等
-        return Promise.reject(error);
+        return Promise.reject(errorMsg);
     }
 );
 

@@ -2,6 +2,7 @@
  * @description 查询页面的全局混入封装
  * @author wuchong
  */
+import axios from "axios";
 export default {
     data() {
         return {
@@ -11,15 +12,21 @@ export default {
             pageSizeOpts: [10, 20, 30, 50], // pageSize可选择项
             tableDataTotal: 0, // 查询结果总条数
             tableData: [], // 查询结果列表
+            searchCancelFn: null, // 取消请求
         };
     },
     computed: {},
     methods: {
         searchRequest(url, params) {
             const vm = this;
-            if (vm.isSearching) {
-                return false
-            }
+            // if (vm.isSearching) {
+            //     return false
+            // }
+
+            const CancelToken = axios.CancelToken;
+            // this.searchCancelFn && this.searchCancelFn()
+            // this.searchCancelFn = null
+
             // 缓存查询参数
             vm.$store.dispatch("saveCachePars", {
                 name: vm.$route.name,
@@ -32,7 +39,11 @@ export default {
             // 返回Promise对象
             return new Promise((resolve, reject) => {
                 vm.$http
-                    .post(url, params)
+                    .post(url, params, {
+                        cancelToken: new CancelToken(function executor(c) {
+                            vm.searchCancelFn = c;
+                        })
+                    })
                     .then(res => {
                         // 总条数
                         vm.tableDataTotal = res.data.total;
@@ -62,17 +73,24 @@ export default {
                         vm.tableDataTotal = 0;
 
                         // 错误信息提示
-                        let message =
-                            typeof error === "string"
-                                ? error
-                                : "查询失败，请稍后重试";
-                        vm.$Message.destroy();
-                        vm.$Message.error(message);
+                        if (error === 'false') {
+                            console.log('请求被取消')
+                        } else {
+                            error = typeof error === 'string' ? error : "查询失败，请稍后重试";
+                            vm.$Message.destroy();
+                            vm.$Message.error(error);
+                        }
 
                         // reject的做法等同于抛出错误，会打印出错误
                         reject(error);
                     });
             });
         }
+    },
+    beforeRouteLeave(to, from, next) {
+        const vm = this;
+        // 页面离开，如果请求进行中则取消请求
+        vm.searchCancelFn && vm.searchCancelFn('false');
+        next();
     }
 };

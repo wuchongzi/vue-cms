@@ -18,7 +18,7 @@
             <div class="table-options">
                 <Button type="primary" icon="plus" @click="handleCreate">新增收单机构</Button>
             </div>
-            <Table :columns="tableColumns" :data="tableData" :loading="tableLoading"></Table>
+            <Table :columns="tableColumns" :data="tableData" :loading="searchLoading"></Table>
             <div class="table-page">
                 <Page :total="tableDataTotal" :current.sync="pars.pageNum" :page-size="pars.pageSize" :page-size-opts="pageSizeOpts" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="pageSizeChange"></Page>
             </div>
@@ -62,7 +62,7 @@ export default {
                 pageNum: 1, // 页码
                 pageSize: 10 // 每页条数
             },
-            tableLoading: false,
+            searchLoading: false,
             pageSizeOpts: [10, 20, 30, 50],
             tableDataTotal: 0,
             tableColumns: [
