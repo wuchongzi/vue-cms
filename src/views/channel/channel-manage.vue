@@ -94,7 +94,6 @@
 
 <script>
 import { formatDate } from "@/utils/util";
-import { searchData } from "@/utils/search";
 export default {
     name: "orgManage",
     data() {

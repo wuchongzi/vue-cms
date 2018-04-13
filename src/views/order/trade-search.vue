@@ -97,10 +97,12 @@
                 <p class="amount-total">合计：
                     <span>200,000.00</span>&nbsp;元</p>
             </div>
-            <Table :columns="tableColumns" :data="tableData" :loading="tableLoading"></Table>
+            <Table :columns="tableColumns" :data="tableData"></Table>
             <div class="table-page">
                 <Page :total="tableDataTotal" :current.sync="pars.pageNum" :page-size="pars.pageSize" :page-size-opts="pageSizeOpts" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="pageSizeChange"></Page>
             </div>
+            <!-- 查询加载loading -->
+            <Spin size="large" fix v-if="isSearching"></Spin>
         </Card>
     </div>
 </template>
@@ -108,32 +110,28 @@
 <script>
 import expandRow from "./components/trade-expand.vue";
 import { formatDate, formatThousand } from "@/utils/util";
-import { searchData } from "@/utils/search";
+import searchPage from "@/mixins/searchPage";
 export default {
     name: "tradeSearch",
     components: { expandRow },
+    mixins: [searchPage],
     data() {
         return {
             pars: {
-                filter: {
-                    timeType: "0", // 时间类型
-                    timeRange: ["", ""], // 时间范围
-                    accountId: "", // 商户号
-                    orderId: "", // 商户订单号
-                    tradeId: "", // 对账流水号
-                    acquiringName: "", // 收单机构
-                    product: "", // 产品
-                    payType: "", // 支付方式
-                    amountMin: 0, // 最小订单金额
-                    amountMax: 0, // 最大订单金额
-                    status: "" // 支付状态
-                },
+                timeType: "0", // 时间类型
+                timeRange: ["", ""], // 时间范围
+                accountId: "", // 商户号
+                orderId: "", // 商户订单号
+                tradeId: "", // 对账流水号
+                acquiringName: "", // 收单机构
+                product: "", // 产品
+                payType: "", // 支付方式
+                amountMin: 0, // 最小订单金额
+                amountMax: 0, // 最大订单金额
+                status: "", // 支付状态
                 pageNum: 1, // 页码
                 pageSize: 10 // 每页条数
             },
-            tableLoading: false,
-            pageSizeOpts: [10, 20, 30, 50],
-            tableDataTotal: 0, // 总条数
             tableColumns: [
                 {
                     type: "expand",
@@ -282,8 +280,7 @@ export default {
                         ]);
                     }
                 }
-            ],
-            tableData: []
+            ]
         };
     },
     methods: {
@@ -292,15 +289,29 @@ export default {
             console.log(val);
             // this.pars.filter.timeRange = val;
         },
-        // 查询请求
+        // 对查询请求再做一次封装，不同查询页面可能需要对查询参数进行不同的处理
         doSearch() {
-            searchData(this, this.$api.tradeSearch);
+            const vm = this;
+
+            // 对查询参数处理-将时间转为时间戳
+            let params = Object.assign({}, vm.pars);
+            params.timeArray = params.timeArray.map(
+                item => (item ? Date.parse(item).toString() : "")
+            );
+            // console.log('查询参数', params)
+
+            this.searchRequest(vm.$api.tradeSearch, params);
         },
         // 查询按钮查询
         handleSearch() {
             this.pars.pageNum = 1;
             this.pars.pageSize = 10;
             this.doSearch();
+        },
+        // 查询表单重置
+        handleReset() {
+            // 注意：重置并不是清空，而是返回到初始状态
+            this.$refs.searchForm.resetFields();
         },
         // 页码变更查询
         pageChange() {
@@ -310,12 +321,7 @@ export default {
         pageSizeChange(val) {
             // 如果当前不是第一页，每页条数变更会自动跳到第一页触发页码变更
             this.pars.pageSize = val;
-            this.pars.pageNum === 1 ? this.doSearch() : "";
-        },
-        // 查询表单重置
-        handleReset() {
-            this.$refs.searchForm.resetFields();
-            this.handleSearch()
+            this.pars.pageNum === 1 || this.doSearch();
         },
         // 页面初始化
         pageInit() {
