@@ -19,13 +19,11 @@ export default {
     methods: {
         searchRequest(url, params) {
             const vm = this;
-            // if (vm.isSearching) {
-            //     return false
-            // }
+            if (vm.isSearching) {
+                return false
+            }
 
             const CancelToken = axios.CancelToken;
-            // this.searchCancelFn && this.searchCancelFn()
-            // this.searchCancelFn = null
 
             // 缓存查询参数
             vm.$store.dispatch("saveCachePars", {
