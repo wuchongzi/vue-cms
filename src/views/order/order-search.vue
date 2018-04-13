@@ -73,10 +73,12 @@
             <div slot="title">
                 <p>合计：{{orderAmountFormat}}</p>
             </div>
-            <Table :columns="tableColumns" :data="tableData" :loading="tableLoading" stripe></Table>
+            <Table :columns="tableColumns" :data="tableData" stripe></Table>
             <div class="table-page">
                 <Page :total="tableDataTotal" :current.sync="pars.pageNum" :page-size="pars.pageSize" :page-size-opts="pageSizeOpts" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="pageSizeChange"></Page>
             </div>
+            <!-- 查询加载loading -->
+            <Spin size="large" fix v-if="searchLoading"></Spin>
         </Card>
     </div>
 </template>
@@ -108,7 +110,7 @@ export default {
                 pageNum: 1, // 页码
                 pageSize: 10 // 每页条数
             },
-            tableLoading: false,
+            searchLoading: false,
             pageSizeOpts: [10, 20, 30, 50],
             tableDataTotal: 0,
             tableColumns: [
@@ -286,9 +288,7 @@ export default {
         },
         // 查询表单重置
         handleReset() {
-            // this.$refs.searchForm.resetFields();
-            this.dataReset();
-            this.handleSearch();
+            this.$refs.searchForm.resetFields();
         },
         // 页码变更查询
         pageChange() {

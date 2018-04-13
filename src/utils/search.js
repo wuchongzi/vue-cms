@@ -10,12 +10,14 @@ export const searchData = (vm, url, params) => {
         name: vm.$route.name,
         pars: vm.pars
     });
-    vm.tableLoading = true;
+    // 加载中
+    vm.searchLoading = true;
+
     return new Promise((resolve, reject) => {
         vm.$http
             .post(url, params, {
                 cancelToken: new CancelToken(function executor(c) {
-                    vm.searchCancelFn = c
+                    vm.searchCancelFn = c;
                 })
             })
             .then(res => {
@@ -33,7 +35,7 @@ export const searchData = (vm, url, params) => {
                           })
                         : [];
                 vm.tableData = dataList;
-                vm.tableLoading = false;
+                vm.searchLoading = false;
                 resolve(res);
             })
             .catch(error => {
@@ -41,7 +43,7 @@ export const searchData = (vm, url, params) => {
                 vm.$store.dispatch("removeCachePars", vm.$route.name);
                 let message =
                     typeof error === "string" ? error : "查询失败，请稍后重试";
-                vm.tableLoading = false;
+                vm.searchLoading = false;
                 reject(error); // reject的做法等同于抛出错误，会打印出错误
                 vm.$Message.destroy();
                 vm.$Message.error(message);
