@@ -22,23 +22,21 @@ const tag = {
             if (toRoute.meta.standTag === false || toRoute.meta.isSubMenu) {
                 return false;
             }
-            let arr = [...state.pageTags];
             let i = state.pageTags.findIndex(item => item.name === toRoute.name);
-            // 有则替换，无则添加
-            i > -1 ? (arr[i] = toRoute) : arr.push(toRoute);
-            state.pageTags = arr;
+            // 有则替换，无则添加，注意替换时使用splice，因为vue官方文档说明：使用索引直接设置时vue无法检测到数组变动
+            i > -1 ? state.pageTags.splice(i, 1, toRoute) : state.pageTags.push(toRoute);
         },
         // 缓存当前打开的pagetags到本地
         cachePageTags(state) {
-            localStorage.setItem(
+            sessionStorage.setItem(
                 "pageTags",
                 JSON.stringify(state.pageTags)
             );
         },
         // 初始化pagetags列表
         initPageTags(state) {
-            state.pageTags = localStorage.getItem("pageTags")
-                ? JSON.parse(localStorage.getItem("pageTags"))
+            state.pageTags = sessionStorage.getItem("pageTags")
+                ? JSON.parse(sessionStorage.getItem("pageTags"))
                 : [];
         },
         // 删除单个标签page（关闭标签页）

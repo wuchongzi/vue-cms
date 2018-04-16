@@ -29,7 +29,6 @@ export const formatDate = (date, fmt) => {
         "m+": date.getMinutes(),
         "s+": date.getSeconds()
     };
-    // 遍历这个对象
     for (let k in o) {
         if (new RegExp(`(${k})`).test(fmt)) {
             // console.log(RegExp.$1);

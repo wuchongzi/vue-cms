@@ -1,5 +1,6 @@
 // 公共css
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
     background: #f0f0f0;
@@ -19,7 +20,8 @@ body {
     width: 100%;
     height: 100%;
 }
-ul,li {
+ul,
+li {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -28,25 +30,54 @@ p {
     margin: 0;
 }
 
-// button
-.ivu-btn-text:focus {
-    box-shadow: none;
+// 颜色变量
+$colorOrange: #ff9900;
+$colorBlue: #2d8cf0;
+$colorRed: #ed3f14;
+$colorGreen: #19be6b;
+
+// iview默认样式修改
+#app {
+    // 文字按钮阴影去除
+    .ivu-btn-text:focus {
+        box-shadow: none;
+    }
+    // 表单label右边距
+    .ivu-form .ivu-form-item-label {
+        padding-right: 10px;
+    }
+    // 表格th中的padding
+    .ivu-table-cell {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    // 下拉表格内容边距调整
+    td.ivu-table-expanded-cell {
+        padding: 20px 20px 10px 50px;
+    }
+    .cals-form-inline .ivu-form-item {
+        display: inline-block;
+        margin-right: 10px;
+        vertical-align: top;
+    }
+    .cals-btn-reset {
+        margin-left: 8px;
+    }
+    // 日期时间选择
+    .datetimerange-s {
+        width: 300px;
+    }
+}
+.ivu-modal {
+    .ivu-btn-text:focus {
+        box-shadow: none;
+    }
+    .ivu-form-item-label {
+        padding-right: 10px;
+    }
 }
 
-// 日期时间选择
-.datetimerange-s {
-    width: 300px;
+// textarea禁止拖拽
+.form-textarea.no-resize {
+    resize: none;
 }
-
-// table
-.ivu-form .ivu-form-item-label {
-    padding-right: 10px;
-}
-.ivu-table-cell {
-    padding-left: 8px;
-    padding-right: 8px;
-}
-td.ivu-table-expanded-cell {
-    padding: 20px 20px 10px 50px;
-}
-

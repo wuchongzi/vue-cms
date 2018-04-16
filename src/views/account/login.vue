@@ -12,7 +12,7 @@
                     </div>
                     <div class="login-form">
                         <Form ref="formLoginRef" :model="formLogin" :rules="rules">
-                            <FormItem prop="user">
+                            <FormItem prop="userName">
                                 <Input type="text" size="large" v-model="formLogin.userName" placeholder="请输入用户名" clearable>
                                     <span slot="prepend">
                                         <Icon :size="16" type="person"></Icon>
@@ -73,24 +73,23 @@ export default {
     },
     methods: {
         handleLogin() {
-            this.$refs.formLoginRef.validate(valid => {
+            const vm = this
+            vm.$refs.formLoginRef.validate(valid => {
                 if (valid) {
-                    this.btnLoading = true;
+                    vm.btnLoading = true;
                     let params = Object.assign({}, this.formLogin);
                     // 加密
                     // params.passWord = crypto.MD5(params.passWord);
-                    this.$store
+                    vm.$store
                         .dispatch("login", params)
                         .then(res => {
-                            this.btnLoading = false;
-                            this.$router.replace({ path: "/" });
+                            vm.btnLoading = false;
+                            vm.$router.replace({ path: "/" });
                         })
                         .catch(error => {
-                            let message =
-                                typeof error === "string" ? error : "登录失败，请稍后重试";
-                            this.btnLoading = false;
-                            this.$Message.destroy()
-                            this.$Message.error(message);
+                            vm.btnLoading = false;
+                            vm.$Message.destroy();
+                            vm.$Message.error(error);
                         });
 
                     // 模拟登录

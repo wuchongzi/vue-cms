@@ -18,14 +18,13 @@ const router = new Router({
  * to 进入  from 离开  next 传递
  */
 router.beforeEach((to, from, next) => {
-    // console.log('to.matched:',to.matched);
+    // console.log('router beforeEach:', to);
     // 启动加载进度条
     iView.LoadingBar.start();
     // 路由拦截
-    if (Auth.getToken()) {
-        // 已登录
+    if (Auth.getToken()) { // 本地存在登录token（登录过，浏览器未失效，但是服务器失效未知）
         if (to.matched.some(res => res.meta.isLoginRouter)) {
-            // 进入登录相关页面直接重定向到首页
+            // 进入登录相关页面做拦截处理
             next({
                 path: "/"
             });
@@ -33,8 +32,7 @@ router.beforeEach((to, from, next) => {
         } else {
             next();
         }
-    } else {
-        // 未登录
+    } else { // 本地不存在登录token（未登录过）
         if (to.matched.some(res => res.meta.withoutAuth)) {
             // 不需要登录认证的页面 直接进入
             next();

@@ -8,17 +8,20 @@ import Vue from "vue";
 
 import Auth from "@/utils/auth";
 
-// 创建axios实例
+/**
+ * 第一步：创建axios实例
+ */
 const service = axios.create({
     baseURL: process.env.BASE_API, // api的base_url
-    timeout: 15000, // 请求超时时间
-    responseType: "json",
-    // headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    // }
+    timeout: 8000, // 请求超时时间
+    responseType: "json" // 服务器响应的数据类型，默认json
 });
-// 单独设置header
-service.defaults.headers.post["Content-Type"] = "application/json"
+
+/**
+ * 第二步：实例创建后修改实例默认值
+ */
+// post请求头类型修改，默认是 application/x-www-form-urlencoded
+service.defaults.headers.post["Content-Type"] = "application/json";
 
 // 添加请求拦截器
 service.interceptors.request.use(
@@ -37,8 +40,7 @@ service.interceptors.request.use(
     },
     error => {
         console.error(error);
-        let message = "网络异常";
-        return Promise.reject(message);
+        return Promise.reject(error);
     }
 );
 
@@ -52,17 +54,23 @@ service.interceptors.response.use(
             return data;
         } else {
             // 请求失败返回 rejected 状态，会被链式 .catch()捕获
-            let errMessage = data.message || "数据异常";
-            return Promise.reject(errMessage);
+            let errorMsg = data.msg || "参数错误";
+            return Promise.reject(errorMsg);
         }
     },
     error => {
-        console.error(error);
-        // 响应无结果，接口调用失败
-        let message = "请求失败";
-        // 直接抛出异常信息
-        return Promise.reject(message);
+        console.error(error.code, error.message);
+        let errorMsg = error.message || '请求失败，请稍后重试';
+        // 请求超时
+        if ( error.code == "ECONNABORTED" && error.message.indexOf("timeout") != -1) {
+            errorMsg = "请求超时"
+        }
+        if (axios.isCancel(error)) {
+            errorMsg = "false"
+        }
+        // 接口调用失败、请求超时等
+        return Promise.reject(errorMsg);
     }
 );
 
-export default service
+export default service;

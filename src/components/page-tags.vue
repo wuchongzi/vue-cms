@@ -164,9 +164,10 @@ export default {
     mounted() {
         // 这里不设定时器就会有偏移bug
         setTimeout(() => {
-            this.$refs.pageTag.forEach((item, index) => {
+            let pageTagRefs = [].concat(this.$refs.pageTag);
+            pageTagRefs.forEach((item, index) => {
                 if (this.$route.name === item.name) {
-                    let tag = this.$refs.pageTag[index].$el;
+                    let tag = pageTagRefs[index].$el;
                     this.moveToView(tag);
                 }
             });

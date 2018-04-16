@@ -1,3 +1,4 @@
+// layout组件样式
 .app-layout {
     position: relative;
     width: 100%;
@@ -95,12 +96,37 @@
     height: 100%;
     overflow-y: scroll;
     overflow-x: auto;
-    background-color: #F0F0F0;
+    background-color: #f0f0f0;
     z-index: 1;
     .main {
         min-width: 1080px;
         min-height: 100%;
         padding: 10px 10px 30px;
         box-sizing: border-box;
+    }
+}
+
+// .page相关样式
+.app-layout {
+    .card-search {
+        .search-item {
+            width: 200px;
+        }
+        .ivu-card-body {
+            padding-bottom: 0;
+        }
+    }
+    .card-search + .card-table {
+        margin-top: 15px;
+    }
+    .table-page {
+        margin-top: 15px;
+        text-align: right;
+    }
+    .table-options {
+        margin-bottom: 15px;
+        .search-item {
+            width: 200px;
+        }
     }
 }
