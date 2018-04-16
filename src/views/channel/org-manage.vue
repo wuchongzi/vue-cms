@@ -16,12 +16,14 @@
         <!-- table -->
         <Card :bordered="false" class="card-table" shadow>
             <div class="table-options">
-                <Button type="primary" icon="plus" @click="handleCreate">新增收单机构</Button>
+                <Button type="primary" icon="plus" @click="handleCreate">创建收单机构</Button>
             </div>
-            <Table :columns="tableColumns" :data="tableData" :loading="searchLoading"></Table>
+            <Table :columns="tableColumns" :data="tableData"></Table>
             <div class="table-page">
                 <Page :total="tableDataTotal" :current.sync="pars.pageNum" :page-size="pars.pageSize" :page-size-opts="pageSizeOpts" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="pageSizeChange"></Page>
             </div>
+            <!-- 查询加载loading -->
+            <Spin size="large" fix v-if="isSearching"></Spin>
         </Card>
 
         <!-- 创建收单机构 -->
@@ -31,15 +33,19 @@
                 <Button type="primary" size="large" :loading="modalCreate.okLoading" @click="createOk">提交</Button>
             </div>
             <div class="modal-inner">
-                <Form ref="formCreate" :model="parsCreate" :rules="ruleCreate" :label-width="120">
+                <Form ref="formCreate" :model="parsCreate" :rules="rulesCreate" :label-width="120">
                     <FormItem label="收单机构性质：" prop="orgProperty">
-                        <Select class="form-el" v-model="parsCreate.orgProperty" placeholder="请选择">
-                            <Option value="0">机构</Option>
-                            <Option value="1">银行</Option>
+                        <Select class="form-el" v-model="parsCreate.orgProperty" placeholder="请选择" @on-change="orgPropertyChange">
+                            <Option value="1">机构</Option>
+                            <Option value="2">银行</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="收单机构名称：" prop="orgName">
-                        <Input class="form-el" v-model="parsCreate.orgName" placeholder="请输入"></Input>
+                    <FormItem ref="orgName" label="收单机构名称：" prop="orgName">
+                        <Select v-if="isOrgNameBank" class="form-el" v-model="parsCreate.orgName" placeholder="请选择银行">
+                            <Option value="1">中国银行</Option>
+                            <Option value="2">工商银行</Option>
+                        </Select>
+                        <Input v-else class="form-el" v-model="parsCreate.orgName" placeholder="请输入"></Input>
                     </FormItem>
                     <FormItem label="收单机构简称：" prop="orgShortName">
                         <Input class="form-el" v-model="parsCreate.orgShortName" placeholder="请输入"></Input>
@@ -51,9 +57,10 @@
 </template>
 
 <script>
-import { formatDate } from "@/utils/util";
+import searchPage from "@/mixins/searchPage";
 export default {
     name: "orgManage",
+    mixins: [searchPage],
     data() {
         return {
             pars: {
@@ -61,9 +68,6 @@ export default {
                 pageNum: 1, // 页码
                 pageSize: 10 // 每页条数
             },
-            searchLoading: false,
-            pageSizeOpts: [10, 20, 30, 50],
-            tableDataTotal: 0,
             tableColumns: [
                 {
                     title: "序号",
@@ -199,9 +203,9 @@ export default {
                     }
                 }
             ],
-            tableData: [],
+            // 收单机构弹出层设置
             modalCreate: {
-                title: "新增收单机构",
+                title: "创建收单机构",
                 visible: false,
                 okLoading: false,
                 width: 500,
@@ -209,12 +213,25 @@ export default {
                     ...this.$config.modalStyles
                 }
             },
+            // 新增机构表单参数
             parsCreate: {
-                orgProperty: "",
-                orgName: "",
-                orgShortName: ""
+                orgProperty: "1", // 机构性质
+                orgName: "", // 机构名称
+                orgShortName: "" // 机构简称
             },
-            ruleCreate: {
+            ruleOrgNameBank: [
+                {
+                    required: true,
+                    message: "请选择银行",
+                    trigger: "change"
+                }
+            ],
+            ruleOrgNameOrg: {
+                required: true,
+                message: "请输入名称",
+                trigger: "blur"
+            },
+            rulesCreate: {
                 orgProperty: [
                     {
                         required: true,
@@ -225,8 +242,8 @@ export default {
                 orgName: [
                     {
                         required: true,
-                        message: "请输入收单机构名称",
-                        trigger: "blur"
+                        message: "收单机构名称不能为空",
+                        trigger: `${this.isOrgNameBank?"change":"blur"}`
                     }
                 ],
                 orgShortName: [
@@ -238,6 +255,12 @@ export default {
                 ]
             }
         };
+    },
+    computed: {
+        // 新增机构判断机构选择的是否是银行
+        isOrgNameBank() {
+            return this.parsCreate.orgProperty === "2" ? true : false;
+        }
     },
     methods: {
         // 查询请求
@@ -331,6 +354,10 @@ export default {
         // 取消创建
         createCancel() {
             this.closeCreateModal()
+        },
+        // 收单机构性质改变
+        orgPropertyChange(val) {
+            this.$refs.orgName.resetFields()
         }
     },
     created() {

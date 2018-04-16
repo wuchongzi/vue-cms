@@ -59,7 +59,7 @@
             </div>
         </Card>
 
-        <!-- 创建收单机构 -->
+        <!-- modal-创建收单机构 -->
         <Modal v-model="modalCreate.visible" :width="modalCreate.width" :styles="modalCreate.styles" :title="modalCreate.title" :mask-closable="false" :closable="false">
             <div slot="footer">
                 <Button type="text" size="large" @click="createCancel">取消</Button>
@@ -69,8 +69,8 @@
                 <Form ref="formCreate" :model="parsCreate" :rules="ruleCreate" :label-width="120">
                     <FormItem label="所属收单机构：" prop="belongOrganization">
                         <Select class="form-el" v-model="parsCreate.belongOrganization" placeholder="请选择">
-                            <Option value="0">机构</Option>
-                            <Option value="1">银行</Option>
+                            <Option value="1">机构</Option>
+                            <Option value="2">银行</Option>
                         </Select>
                     </FormItem>
                     <FormItem label="通道状态：" prop="status">
@@ -84,7 +84,7 @@
                         <Input class="form-el" v-model="parsCreate.name" placeholder="请输入"></Input>
                     </FormItem>
                     <FormItem label="通道描述：" prop="descriptions">
-                        <Input class="form-textarea" type="textarea" :rows="3" v-model="parsCreate.descriptions" placeholder="请输入" :maxlength="100"></Input>
+                        <Input class="form-textarea" type="textarea" :rows="2" v-model="parsCreate.descriptions" placeholder="请输入" :maxlength="30"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -94,13 +94,14 @@
 
 <script>
 import { formatDate } from "@/utils/util";
+import searchPage from "@/mixins/searchPage";
 export default {
     name: "orgManage",
     data() {
         return {
             pars: {
-                belongOrganization: null, // 收单机构
-                name: null, // 通道名称
+                belongOrganization: "", // 收单机构
+                name: "", // 通道名称
                 channelId: null, // 通道号
                 status: null, // 通道状态
                 pageNum: 1, // 页码
