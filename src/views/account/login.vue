@@ -73,19 +73,21 @@ export default {
     },
     methods: {
         handleLogin() {
-            this.$refs.formLoginRef.validate(valid => {
+            const vm = this
+            vm.$refs.formLoginRef.validate(valid => {
                 if (valid) {
-                    this.btnLoading = true;
+                    vm.btnLoading = true;
                     let params = Object.assign({}, this.formLogin);
                     // 加密
                     // params.passWord = crypto.MD5(params.passWord);
-                    this.$store
+                    vm.$store
                         .dispatch("login", params)
                         .then(res => {
-                            this.btnLoading = false;
-                            this.$router.replace({ path: "/" });
+                            vm.btnLoading = false;
+                            vm.$router.replace({ path: "/" });
                         })
                         .catch(error => {
+                            vm.btnLoading = false;
                             vm.$Message.destroy();
                             vm.$Message.error(error);
                         });

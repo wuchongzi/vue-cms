@@ -76,3 +76,8 @@ $colorGreen: #19be6b;
         padding-right: 10px;
     }
 }
+
+// textarea禁止拖拽
+.form-textarea.no-resize {
+    resize: none;
+}

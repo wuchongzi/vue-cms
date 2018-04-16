@@ -93,6 +93,7 @@ export default {
     mixins: [searchPage],
     data() {
         return {
+            // 状态下拉选项
             statusOptions: [
                 { value: "1", title: "处理中" },
                 { value: "2", title: "已完成" },
@@ -298,7 +299,7 @@ export default {
         pageSizeChange(val) {
             // iview这里存在一个bug，当前不是第一页时，改变pageSize会返回第一页触发pageNum改变；当前在第一页时改变pageSize不会触发pageNum改变。这里需要判断当前是否是第一页
             this.pars.pageSize = val;
-            this.pars.pageNum === 1 || this.doSearch();
+            this.pars.pageNum === 1 ? this.doSearch() : "";
         },
         // 页面初始化
         pageInit() {
