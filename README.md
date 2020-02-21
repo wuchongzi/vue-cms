@@ -1,4 +1,4 @@
-# bangpay-b
+# vue-cms
 
 > A Vue.js project
 
