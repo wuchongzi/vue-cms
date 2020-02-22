@@ -32,7 +32,7 @@
                         return "微信"
                         break;
                     case "3":
-                        return "好友邦"
+                        return "qwe"
                         break;
                     case "4":
                         return "银联"

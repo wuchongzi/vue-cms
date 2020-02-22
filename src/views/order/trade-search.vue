@@ -55,7 +55,7 @@
                         <Select v-model="pars.filter.payType" class="search-item" placeholder="请选择">
                             <Option value="1">支付宝</Option>
                             <Option value="2">微信</Option>
-                            <Option value="3">好友邦</Option>
+                            <Option value="3">qwe</Option>
                             <Option value="4">银联</Option>
                         </Select>
                     </FormItem>
@@ -177,7 +177,7 @@ export default {
                                 text = "微信";
                                 break;
                             case "3":
-                                text = "好友邦";
+                                text = "qwe";
                                 break;
                             default:
                                 text = "未知";

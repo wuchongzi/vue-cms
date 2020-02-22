@@ -8,7 +8,7 @@
                 </div>
                 <Card :bordered="false" class="card-login">
                     <div class="login-logo">
-                        <img :src="logoSrc" alt="好友支付">
+                        <img :src="logoSrc" alt="qwe">
                     </div>
                     <div class="login-form">
                         <Form ref="formLoginRef" :model="formLogin" :rules="rules">
